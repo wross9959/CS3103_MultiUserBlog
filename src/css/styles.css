@@ -1,0 +1,155 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: var(--dark-color);
+    color: var(--light-color);
+  
+}
+
+/* dakrmode */
+/* background  28282B  second 333  light 505050*/
+
+/* Custom Props */
+:root{
+    --primary-color: #F10F0F;
+    --secondary-color: #333;
+    --light-color: #f4f4f4;
+    --dark-color: #28282B;
+    --danger-color: #dc3545;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --lightgrey-color: #505050;
+    --selectLight-color: #707070;
+    --main-color: #6EACDA;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: var(--light-color);
+}
+
+a {
+    text-decoration: none;
+    color: var(--light-color);
+}
+
+ul{
+    list-style: none;
+}
+
+image {
+    width: 100%;
+    height: auto;
+}
+
+
+/* Nav Bar */
+.navbar {
+    background-color: var(--dark-color);
+    padding: 20px;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+.navbar .main-menu ul {
+    display: flex;
+}
+
+.navbar ul li a{
+    padding: 10px 15px;
+    display: block;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.5s;
+}
+
+.navbar ul li a:hover{
+    color: var(--light-color);
+    background-color: var(--selectLight-color);
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar ul li a.active{
+    color: var(--light-color);
+    background-color: var(--main-color);
+    border-radius: 12px;
+}
+
+.navbar ul li:last-child a{
+    margin-left: 10px;
+}
+
+.navbar ul li a i{
+    margin-right: 5px;
+}
+
+
+/* Utility Classes */
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.container-sm {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Button */
+
+.btn {
+    display: inline-block;
+    padding: 13px 20px;
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.btn:hover {
+    opacity: 0.8;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #000;
+}
+
+.btn-dark {
+    background-color: var(--lightgrey-color);
+    color: #fff;
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+
+
+.hero .container img {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px; /* Adjust the size as needed */
+    height: 100px; /* Adjust the size as needed */
+    object-fit: cover;
+}
