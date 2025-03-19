@@ -4,6 +4,6 @@ APP_PORT = 8023
 APP_DEBUG = True
 
 DB_HOST = 'localhost'
-DB_USER = ''
-DB_PASSWD = ''
+DB_USER = 's6we4'
+DB_PASSWD = 'BloggingIsFun'
 DB_DATABASE = DB_USER
