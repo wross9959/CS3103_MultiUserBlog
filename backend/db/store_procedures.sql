@@ -1,256 +1,84 @@
--- user tables
-
 DELIMITER $$
 
-CREATE PROCEDURE create_user(
-    IN username VARCHAR(80),
-    IN email VARCHAR(120),
-    IN first_name VARCHAR(50),
-    IN last_name VARCHAR(50),
-    IN password VARCHAR(255),
-    IN active BOOLEAN,
-    IN admin BOOLEAN
-)
+-- USER AUTH & VERIFICATION
+CREATE PROCEDURE verify_user_email(IN user_email VARCHAR(120))
 BEGIN
-    INSERT INTO users (username, email, first_name, last_name, password, active, admin, created_at)
-    VALUES (username, email, first_name, last_name, password, active, admin, NOW());
+    UPDATE users SET active = TRUE WHERE email = user_email;
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE get_all_users()
+CREATE PROCEDURE reset_password(IN user_email VARCHAR(120), IN new_password VARCHAR(255))
 BEGIN
-    SELECT * FROM users;
+    UPDATE users SET password = new_password WHERE email = user_email;
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE update_user(
-    IN user_id INT,
-    IN username VARCHAR(80),
-    IN email VARCHAR(120),
-    IN first_name VARCHAR(50),
-    IN last_name VARCHAR(50),
-    IN active BOOLEAN,
-    IN admin BOOLEAN
-)
+CREATE PROCEDURE get_user_by_id(IN userId INT)
 BEGIN
-    UPDATE users
-    SET username = username, email = email, first_name = first_name, last_name = last_name,
-        active = active, admin = admin
-    WHERE id = user_id;
+    SELECT * FROM users WHERE id = userId;
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE delete_user(IN user_id INT)
+-- BLOG FILTERING
+CREATE PROCEDURE get_blogs_after_date(IN after_date DATETIME)
 BEGIN
-    DELETE FROM users WHERE id = user_id;
+    SELECT * FROM blogs WHERE created_at > after_date;
 END$$
 
-DELIMITER ;
-
--- blogs
-
-DELIMITER $$
-
-CREATE PROCEDURE create_blog(
-    IN title VARCHAR(255),
-    IN body TEXT,
-    IN user_id INT,
-    IN status VARCHAR(50)
-)
+CREATE PROCEDURE get_blogs_by_keyword(IN keyword VARCHAR(100))
 BEGIN
-    INSERT INTO blogs (title, body, user_id, status, created_at)
-    VALUES (title, body, user_id, status, NOW());
+    SELECT * FROM blogs WHERE title LIKE CONCAT('%', keyword, '%') OR body LIKE CONCAT('%', keyword, '%');
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE get_all_blogs()
+CREATE PROCEDURE get_blogs_by_user(IN blog_user_id INT)
 BEGIN
-    SELECT * FROM blogs;
+    SELECT * FROM blogs WHERE user_id = blog_user_id;
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE update_blog(
-    IN blog_id INT,
-    IN title VARCHAR(255),
-    IN body TEXT,
-    IN status VARCHAR(50)
-)
+-- COMMENT FILTERING
+CREATE PROCEDURE get_comments_for_blog(IN blogId INT)
 BEGIN
-    UPDATE blogs
-    SET title = title, body = body, status = status
-    WHERE id = blog_id;
+    SELECT * FROM comments WHERE blog_id = blogId;
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE delete_blog(IN blog_id INT)
+CREATE PROCEDURE get_comments_after_date(IN blogId INT, IN after_date DATETIME)
 BEGIN
-    DELETE FROM blogs WHERE id = blog_id;
+    SELECT * FROM comments WHERE blog_id = blogId AND created_at > after_date;
 END$$
 
-DELIMITER ;
-
--- comment table 
-
-DELIMITER $$
-
-CREATE PROCEDURE create_comment(
-    IN blog_id INT,
-    IN user_id INT,
-    IN title VARCHAR(255),
-    IN body TEXT
-)
+CREATE PROCEDURE get_comments_by_keyword(IN blogId INT, IN keyword VARCHAR(100))
 BEGIN
-    INSERT INTO comments (blog_id, user_id, title, body, created_at)
-    VALUES (blog_id, user_id, title, body, NOW());
+    SELECT * FROM comments WHERE blog_id = blogId AND body LIKE CONCAT('%', keyword, '%');
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE get_all_comments()
+-- CATEGORY ASSIGNMENT
+CREATE PROCEDURE assign_category_to_blog(IN blogId INT, IN categoryId INT)
 BEGIN
-    SELECT * FROM comments;
+    INSERT INTO blog_categories (blog_id, category_id) VALUES (blogId, categoryId);
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE update_comment(
-    IN comment_id INT,
-    IN title VARCHAR(255),
-    IN body TEXT
-)
+CREATE PROCEDURE remove_category_from_blog(IN blogId INT, IN categoryId INT)
 BEGIN
-    UPDATE comments
-    SET title = title, body = body
-    WHERE id = comment_id;
+    DELETE FROM blog_categories WHERE blog_id = blogId AND category_id = categoryId;
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE delete_comment(IN comment_id INT)
+CREATE PROCEDURE get_categories_for_blog(IN blogId INT)
 BEGIN
-    DELETE FROM comments WHERE id = comment_id;
+    SELECT c.* FROM categories c
+    JOIN blog_categories bc ON c.id = bc.category_id
+    WHERE bc.blog_id = blogId;
 END$$
 
-DELIMITER ;
-
--- categories
-
-DELIMITER $$
-
-CREATE PROCEDURE create_category(
-    IN name VARCHAR(255),
-    IN description VARCHAR(255)
-)
+-- FOLLOWERS
+CREATE PROCEDURE get_followers(IN userId INT)
 BEGIN
-    INSERT INTO categories (name, description)
-    VALUES (name, description);
+    SELECT u.* FROM users u
+    JOIN follows f ON u.id = f.follower_id
+    WHERE f.followed_id = userId;
 END$$
 
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE get_all_categories()
+CREATE PROCEDURE get_following(IN userId INT)
 BEGIN
-    SELECT * FROM categories;
-END$$
-
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE update_category(
-    IN category_id INT,
-    IN name VARCHAR(255),
-    IN description VARCHAR(255)
-)
-BEGIN
-    UPDATE categories
-    SET name = name, description = description
-    WHERE id = category_id;
-END$$
-
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE delete_category(IN category_id INT)
-BEGIN
-    DELETE FROM categories WHERE id = category_id;
-END$$
-
-DELIMITER ;
-
--- follows table
-
-DELIMITER $$
-
-CREATE PROCEDURE create_follow(
-    IN follower_id INT,
-    IN followed_id INT
-)
-BEGIN
-    INSERT INTO follows (follower_id, followed_id, created_at)
-    VALUES (follower_id, followed_id, NOW());
-END$$
-
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE delete_follow(
-    IN follow_id INT
-)
-BEGIN
-    DELETE FROM follows WHERE id = follow_id;
-END$$
-
-DELIMITER ;
-
--- activity table
-
-DELIMITER $$
-
-CREATE PROCEDURE log_activity(
-    IN user_id INT,
-    IN action VARCHAR(255)
-)
-BEGIN
-    INSERT INTO activity (user_id, action, created_on)
-    VALUES (user_id, action, NOW());
-END$$
-
-DELIMITER ;
-
-DELIMITER $$
-
-CREATE PROCEDURE get_all_activities()
-BEGIN
-    SELECT * FROM activity;
+    SELECT u.* FROM users u
+    JOIN follows f ON u.id = f.followed_id
+    WHERE f.follower_id = userId;
 END$$
 
 DELIMITER ;
