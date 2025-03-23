@@ -1,4 +1,4 @@
--- Stored Procedures for MariaDB
+-- Stored Procedures for MariaDB (Updated for code compatibility)
 
 -- USERS
 DELIMITER $$
@@ -28,13 +28,6 @@ DELIMITER $$
 CREATE PROCEDURE get_user_by_id(IN p_user_id INT)
 BEGIN
     SELECT * FROM users WHERE id = p_user_id;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE get_user_by_username(IN p_username VARCHAR(80))
-BEGIN
-    SELECT * FROM users WHERE username = p_username;
 END $$
 DELIMITER ;
 
@@ -72,7 +65,7 @@ DELIMITER ;
 
 -- VERIFICATION
 DELIMITER $$
-CREATE PROCEDURE generate_verification_token(IN p_user_id INT)
+CREATE PROCEDURE send_verification(IN p_user_id INT, IN p_email VARCHAR(120))
 BEGIN
     DECLARE v_token VARCHAR(255);
     SET v_token = UUID();
@@ -82,7 +75,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE verify_email_token(IN p_user_id INT, IN p_token VARCHAR(255))
+CREATE PROCEDURE verify_user(IN p_user_id INT, IN p_token VARCHAR(255))
 BEGIN
     DECLARE v_match INT;
     SELECT COUNT(*) INTO v_match FROM verification_tokens
@@ -90,16 +83,16 @@ BEGIN
 
     IF v_match = 1 THEN
         UPDATE users SET active = TRUE WHERE id = p_user_id;
-        SELECT 1 AS success;
+        SELECT 'success' AS status;
     ELSE
-        SELECT 0 AS success;
+        SELECT 'fail' AS status;
     END IF;
 END $$
 DELIMITER ;
 
 -- PASSWORD RESET
 DELIMITER $$
-CREATE PROCEDURE generate_password_reset_token(IN p_user_id INT)
+CREATE PROCEDURE gen_password_token(IN p_user_id INT, IN p_email VARCHAR(120))
 BEGIN
     DECLARE v_token VARCHAR(255);
     SET v_token = UUID();
@@ -109,7 +102,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE reset_password_with_token(IN p_user_id INT, IN p_token VARCHAR(255), IN p_new_password VARCHAR(255))
+CREATE PROCEDURE reset_password(IN p_user_id INT, IN p_token VARCHAR(255), IN p_new_password VARCHAR(255))
 BEGIN
     DECLARE v_match INT;
     SELECT COUNT(*) INTO v_match FROM password_resets
@@ -117,79 +110,18 @@ BEGIN
 
     IF v_match = 1 THEN
         UPDATE users SET password = p_new_password WHERE id = p_user_id;
-        SELECT 1 AS success;
+        SELECT 'success' AS status;
     ELSE
-        SELECT 0 AS success;
+        SELECT 'fail' AS status;
     END IF;
-END $$
-DELIMITER ;
-
--- ROLES
-DELIMITER $$
-CREATE PROCEDURE get_all_roles()
-BEGIN
-    SELECT * FROM roles;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE create_role(IN p_role VARCHAR(50))
-BEGIN
-    INSERT INTO roles (role) VALUES (p_role);
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE get_role(IN p_role_id INT)
-BEGIN
-    SELECT * FROM roles WHERE id = p_role_id;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE delete_role(IN p_role_id INT)
-BEGIN
-    DELETE FROM roles WHERE id = p_role_id;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE get_user_roles(IN p_user_id INT)
-BEGIN
-    SELECT r.* FROM user_roles ur
-    JOIN roles r ON ur.role_id = r.id
-    WHERE ur.user_id = p_user_id;
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE assign_role(IN p_user_id INT, IN p_role VARCHAR(50))
-BEGIN
-    DECLARE v_role_id INT;
-    SELECT id INTO v_role_id FROM roles WHERE role = p_role;
-    INSERT INTO user_roles (user_id, role_id) VALUES (p_user_id, v_role_id);
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE PROCEDURE remove_role(IN p_user_id INT, IN p_role_id INT)
-BEGIN
-    DELETE FROM user_roles WHERE user_id = p_user_id AND role_id = p_role_id;
 END $$
 DELIMITER ;
 
 -- BLOGS
 DELIMITER $$
-CREATE PROCEDURE get_all_blogs(
-    IN p_newerThan DATETIME,
-    IN p_category VARCHAR(100),
-    IN p_keyword VARCHAR(100)
-)
+CREATE PROCEDURE get_all_blogs()
 BEGIN
-    SELECT * FROM blogs
-    WHERE (p_newerThan IS NULL OR created_at > p_newerThan)
-      AND (p_category IS NULL OR FIND_IN_SET(p_category, categories))
-      AND (p_keyword IS NULL OR title LIKE CONCAT('%', p_keyword, '%') OR body LIKE CONCAT('%', p_keyword, '%'));
+    SELECT * FROM blogs;
 END $$
 DELIMITER ;
 
@@ -202,7 +134,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE get_blog(IN p_blog_id INT)
+CREATE PROCEDURE get_blog_by_id(IN p_blog_id INT)
 BEGIN
     SELECT * FROM blogs WHERE id = p_blog_id;
 END $$
@@ -231,12 +163,9 @@ DELIMITER ;
 
 -- COMMENTS
 DELIMITER $$
-CREATE PROCEDURE get_all_comments(IN p_blog_id INT, IN p_newerThan DATETIME, IN p_keyword VARCHAR(100))
+CREATE PROCEDURE get_comments_by_blog_id(IN p_blog_id INT)
 BEGIN
-    SELECT * FROM comments
-    WHERE blog_id = p_blog_id
-      AND (p_newerThan IS NULL OR created_at > p_newerThan)
-      AND (p_keyword IS NULL OR body LIKE CONCAT('%', p_keyword, '%'));
+    SELECT * FROM comments WHERE blog_id = p_blog_id;
 END $$
 DELIMITER ;
 
@@ -278,7 +207,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE get_category(IN p_category_id INT)
+CREATE PROCEDURE get_category_by_id(IN p_category_id INT)
 BEGIN
     SELECT * FROM categories WHERE id = p_category_id;
 END $$
@@ -309,17 +238,69 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE create_follow(IN p_follower_id INT, IN p_followed_id INT)
+CREATE PROCEDURE follow_user(IN p_user_id INT, IN p_follow_id INT)
 BEGIN
     INSERT INTO follows (follower_id, followed_id, created_at)
-    VALUES (p_follower_id, p_followed_id, NOW());
+    VALUES (p_user_id, p_follow_id, NOW());
 END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE delete_follow(IN p_follower_id INT, IN p_followed_id INT)
+CREATE PROCEDURE unfollow_user(IN p_user_id INT, IN p_follow_id INT)
 BEGIN
-    DELETE FROM follows WHERE follower_id = p_follower_id AND followed_id = p_followed_id;
+    DELETE FROM follows WHERE follower_id = p_user_id AND followed_id = p_follow_id;
+END $$
+DELIMITER ;
+
+-- ROLES
+DELIMITER $$
+CREATE PROCEDURE get_all_roles()
+BEGIN
+    SELECT * FROM roles;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE create_role(IN p_role VARCHAR(50))
+BEGIN
+    INSERT INTO roles (role) VALUES (p_role);
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE get_role_by_id(IN p_role_id INT)
+BEGIN
+    SELECT * FROM roles WHERE id = p_role_id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE delete_role(IN p_role_id INT)
+BEGIN
+    DELETE FROM roles WHERE id = p_role_id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE get_user_roles(IN p_user_id INT)
+BEGIN
+    SELECT r.* FROM user_roles ur
+    JOIN roles r ON ur.role_id = r.id
+    WHERE ur.user_id = p_user_id;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE add_role_to_user(IN p_user_id INT, IN p_role_id INT)
+BEGIN
+    INSERT INTO user_roles (user_id, role_id) VALUES (p_user_id, p_role_id);
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE remove_role_from_user(IN p_user_id INT, IN p_role_id INT)
+BEGIN
+    DELETE FROM user_roles WHERE user_id = p_user_id AND role_id = p_role_id;
 END $$
 DELIMITER ;
 
