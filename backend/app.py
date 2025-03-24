@@ -54,17 +54,17 @@ from routes import (
 )
 
 # all routes
-auth.register(api)
-users.register(api)
-verify.register(api)
-reset.register(api)
-admin.register(api)
-roles.register(api)
-blogs.register(api)
-comments.register(api)
-categories.register(api)
-follows.register(api)
-activities.register(api)
+auth.routes(api)
+users.routes(api)
+verify.routes(api)
+reset.routes(api)
+admin.routes(api)
+roles.routes(api)
+blogs.routes(api)
+comments.routes(api)
+categories.routes(api)
+follows.routes(api)
+activities.routes(api)
 
 
 
