@@ -1,0 +1,1 @@
+curl -i -X POST http://cs3103.cs.unb.ca:8023/api/users -H "Content-Type: application/json" -d '{"username": "wross9959", "email": "will.ross@unb.ca", "first_name": "Will", "last_name": "Ross", "password": "flask"}'
