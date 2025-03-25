@@ -12,14 +12,13 @@ cgitb.enable()
 
 app = Flask(__name__, static_url_path='/static')
 app.secret_key = settings.SECRET_KEY
-app.config['SESSION_TYPE'] = 'development'
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_COOKIE_NAME'] = 'The Cookie Monster'
 app.config['SESSION_COOKIE_DOMAIN'] = settings.APP_HOST
 Session(app)
 
 api = Api(app)
-
-# some error handling
 
 @app.errorhandler(400)
 def bad_request(error):
