@@ -12,5 +12,4 @@ SECRET_KEY = "This_is_a_secret_shhh"
 
 
 UNB_SMTP_HOST = 'smtp.unb.ca'
-UNB_SMTP_PORT = 587
 UNB_SMTP_USER = 'UNB_Blog_noreply@unb.ca'
