@@ -39,7 +39,6 @@ class Users(Resource):
                 data['password'],
                 False, # note for store procedure this is account active, not true until verify
                 False, # note this is admin same as above ^
-                data.get('role', 'user')
             ])
             response = {'status': 'User created'}
             responseCode = 201
@@ -50,31 +49,6 @@ class Users(Resource):
         
         return make_response(jsonify(response), responseCode)
 
-        parser = reqparse.RequestParser()
-        parser.add_argument('username', required=True)
-        parser.add_argument('password', required=True)
-        parser.add_argument('email', required=True)
-        parser.add_argument('first_name', required=False)
-        parser.add_argument('last_name', required=False)
-
-        args = parser.parse_args()
-
-        try:
-            db_access('create_user', [
-                args['username'],
-                args['password'],
-                args['email'],
-                args.get('first_name', ''),
-                args.get('last_name', ''),
-                args.get('role', 'user')
-            ])
-            response = {'status': 'success', 'message': 'User created successfully'}
-            responseCode = 201
-        except Exception as e:
-            response = {'status': 'fail', 'message': str(e)}
-            responseCode = 400
-        
-        return make_response(jsonify(response), responseCode)
    
 class CurrentUser(Resource):
 
