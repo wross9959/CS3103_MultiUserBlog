@@ -11,7 +11,7 @@ class SignIn(Resource):
     def post(self):
 
         data = request.get_json()
-        if not data or 'username' not in data or 'password' not in data:
+        if not data or 'email' not in data or 'password' not in data:
            abort(400, 'Invalid input') 
 
 
@@ -22,7 +22,7 @@ class SignIn(Resource):
                 session['user_id'] = user['id']
                 session['username'] = user['username']
                 session['email'] = user['email']
-                session['is_admin'] = user['is_admin']
+                session['is_admin'] = user['admin']
 
                 response = {'status': 'success', 'user': user}
                 responseCode = 200
