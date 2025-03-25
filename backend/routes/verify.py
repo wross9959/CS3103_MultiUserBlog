@@ -20,7 +20,7 @@ class verify(Resource):
         try:
             user_id = session['user_id']
             email = session['email']
-            first_name = session['first_name']
+            first_name = session.get('first_name', 'user')
             result = db_access('send_verification', [user_id, email])
 
             if not result or 'token'  not in result[0]:
@@ -32,12 +32,23 @@ class verify(Resource):
 
             token = result[0]['token']
             subject = "UNB Blog Verfiy your account"
-            body = "Hi {first_name}, \n\n Your verification code is: \n {token} \n\n Click the link to verify your account: {appURL} \n\n Thanks,\n UNB Blog Support \n\n This is an automated message, please do not response"
+            body = f"""
+Hi {first_name}, 
+
+Your verification code is:
+{token}
+Click the link to verify your account: {appURL}
             
-            if send_email(email, subject, body):
-                return make_response(jsonify({"status": "success"}), 200)
-            else:
-                return make_response(jsonify({"status": "fail"}), 500)
+Thanks, 
+UNB Blog Support
+            
+This is an automated message, please do not response
+"""
+
+            send_email(email, subject, body)
+            
+            return make_response(jsonify({"status": "success"}), 200)
+            
             
         except Exception as e:
             return make_response(jsonify({"status": "error", "message": str(e)}), 500)
