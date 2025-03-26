@@ -18,7 +18,7 @@ class Admin(Resource):
         admin_req()
 
         try:
-            users = db_access('get_all')
+            users = db_access('get_all_users')
             return make_response(jsonify(users), 200)
         except Exception as e:
             return make_response(jsonify({"status": "error", "message": str(e)}), 500)

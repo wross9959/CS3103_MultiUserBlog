@@ -1,4 +1,5 @@
-### ✅ API Endpoints (Frontend Use)
+# All Current Avaible Calls
+This is a table for the frontend (Project E)
 
 | Method | URL                                         | Description                           |
 |--------|---------------------------------------------|---------------------------------------|

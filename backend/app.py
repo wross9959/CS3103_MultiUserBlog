@@ -10,6 +10,7 @@ import cgi
 import sys
 cgitb.enable()
 
+# All flask setup 
 app = Flask(__name__, static_url_path='/static')
 app.secret_key = settings.SECRET_KEY
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -20,6 +21,7 @@ Session(app)
 
 api = Api(app)
 
+# Error handling 
 @app.errorhandler(400)
 def bad_request(error):
     return make_response(jsonify({'status': 'Bad request'}), 400)
@@ -66,6 +68,6 @@ follows.routes(api)
 activities.routes(api)
 
 
-
+# main for app
 if __name__ == '__main__':
     app.run(host=settings.APP_HOST, port=settings.APP_PORT, debug=settings.APP_DEBUG)

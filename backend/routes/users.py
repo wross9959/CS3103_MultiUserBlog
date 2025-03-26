@@ -3,6 +3,7 @@
 from flask import request, session, jsonify, abort, make_response
 from flask_restful import Resource, reqparse
 from db_util import db_access
+from werkzeug.security import generate_password_hash
 
 
 
@@ -31,12 +32,13 @@ class Users(Resource):
             abort(400, 'Missing required fields')
         
         try:
+            hash_pwd = generate_password_hash(data['password'])
             db_access('create_user', [
                 data['username'],
                 data['email'],
                 data['first_name'],
                 data['last_name'],
-                data['password'],
+                hash_pwd,
                 False, # note for store procedure this is account active, not true until verify
                 False, # note this is admin same as above ^
             ])

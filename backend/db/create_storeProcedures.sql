@@ -1,51 +1,7 @@
-DROP PROCEDURE IF EXISTS create_user;
-DROP PROCEDURE IF EXISTS get_all_users;
-DROP PROCEDURE IF EXISTS get_user_by_id;
-DROP PROCEDURE IF EXISTS login_user;
-DROP PROCEDURE IF EXISTS update_user;
-DROP PROCEDURE IF EXISTS delete_user;
-DROP PROCEDURE IF EXISTS send_verification;
-DROP PROCEDURE IF EXISTS verify_user;
-DROP PROCEDURE IF EXISTS gen_password_token;
-DROP PROCEDURE IF EXISTS reset_password;
-DROP PROCEDURE IF EXISTS get_all_blogs;
-DROP PROCEDURE IF EXISTS create_blog;
-DROP PROCEDURE IF EXISTS get_blog_by_id;
-DROP PROCEDURE IF EXISTS update_blog;
-DROP PROCEDURE IF EXISTS delete_blog;
-DROP PROCEDURE IF EXISTS get_user_blogs;
-DROP PROCEDURE IF EXISTS get_comments_by_blog_id;
-DROP PROCEDURE IF EXISTS create_comment;
-DROP PROCEDURE IF EXISTS update_comment;
-DROP PROCEDURE IF EXISTS delete_comment;
-DROP PROCEDURE IF EXISTS get_all_categories;
-DROP PROCEDURE IF EXISTS create_category;
-DROP PROCEDURE IF EXISTS get_category_by_id;
-DROP PROCEDURE IF EXISTS update_category;
-DROP PROCEDURE IF EXISTS delete_category;
-DROP PROCEDURE IF EXISTS get_user_follows;
-DROP PROCEDURE IF EXISTS follow_user;
-DROP PROCEDURE IF EXISTS unfollow_user;
-DROP PROCEDURE IF EXISTS get_all_roles;
-DROP PROCEDURE IF EXISTS create_role;
-DROP PROCEDURE IF EXISTS get_role_by_id;
-DROP PROCEDURE IF EXISTS delete_role;
-DROP PROCEDURE IF EXISTS get_user_roles;
-DROP PROCEDURE IF EXISTS add_role_to_user;
-DROP PROCEDURE IF EXISTS remove_role_from_user;
-DROP PROCEDURE IF EXISTS get_all_activities;
-DROP PROCEDURE IF EXISTS log_activity;
 
--- USERS
+DROP PROCEDURE IF EXISTS create_user;
 DELIMITER $$
-CREATE PROCEDURE create_user(
-    IN p_username VARCHAR(80),
-    IN p_email VARCHAR(120),
-    IN p_first_name VARCHAR(50),
-    IN p_last_name VARCHAR(50),
-    IN p_password VARCHAR(255),
-    IN p_active BOOLEAN,
-    IN p_admin BOOLEAN
+CREATE PROCEDURE create_user( IN p_username VARCHAR(80), IN p_email VARCHAR(120), IN p_first_name VARCHAR(50), IN p_last_name VARCHAR(50), IN p_password VARCHAR(255), IN p_active BOOLEAN, IN p_admin BOOLEAN
 )
 BEGIN
     INSERT INTO users (username, email, first_name, last_name, password, active, admin, created_at)
@@ -53,6 +9,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS get_all_users;
 DELIMITER $$
 CREATE PROCEDURE get_all_users()
 BEGIN
@@ -60,6 +18,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS get_user_by_id;
 DELIMITER $$
 CREATE PROCEDURE get_user_by_id(IN p_user_id INT)
 BEGIN
@@ -67,6 +27,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS login_user;
 DELIMITER $$
 CREATE PROCEDURE login_user(IN p_email VARCHAR(120), IN p_password VARCHAR(255))
 BEGIN
@@ -74,6 +36,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS update_user;
 DELIMITER $$
 CREATE PROCEDURE update_user(
     IN p_user_id INT,
@@ -92,6 +56,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS delete_user;
 DELIMITER $$
 CREATE PROCEDURE delete_user(IN p_user_id INT)
 BEGIN
@@ -99,7 +65,8 @@ BEGIN
 END $$
 DELIMITER ;
 
--- VERIFICATION
+
+DROP PROCEDURE IF EXISTS send_verification;
 DELIMITER $$
 CREATE PROCEDURE send_verification(IN p_user_id INT, IN p_email VARCHAR(120))
 BEGIN
@@ -110,6 +77,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS verify_user;
 DELIMITER $$
 CREATE PROCEDURE verify_user(IN p_user_id INT, IN p_token VARCHAR(255))
 BEGIN
@@ -126,7 +95,7 @@ BEGIN
 END $$
 DELIMITER ;
 
--- PASSWORD RESET
+DROP PROCEDURE IF EXISTS gen_password_token;
 DELIMITER $$
 CREATE PROCEDURE gen_password_token(IN p_user_id INT, IN p_email VARCHAR(120))
 BEGIN
@@ -137,6 +106,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS reset_password;
 DELIMITER $$
 CREATE PROCEDURE reset_password(IN p_user_id INT, IN p_token VARCHAR(255), IN p_new_password VARCHAR(255))
 BEGIN
@@ -153,7 +124,8 @@ BEGIN
 END $$
 DELIMITER ;
 
--- BLOGS
+
+DROP PROCEDURE IF EXISTS get_all_blogs;
 DELIMITER $$
 CREATE PROCEDURE get_all_blogs()
 BEGIN
@@ -161,6 +133,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS create_blog;
 DELIMITER $$
 CREATE PROCEDURE create_blog(IN p_title VARCHAR(255), IN p_body TEXT, IN p_user_id INT, IN p_status VARCHAR(50))
 BEGIN
@@ -169,6 +142,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_blog_by_id;
 DELIMITER $$
 CREATE PROCEDURE get_blog_by_id(IN p_blog_id INT)
 BEGIN
@@ -176,6 +150,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS update_blog;
 DELIMITER $$
 CREATE PROCEDURE update_blog(IN p_blog_id INT, IN p_title VARCHAR(255), IN p_body TEXT, IN p_status VARCHAR(50))
 BEGIN
@@ -183,6 +158,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS delete_blog;
 DELIMITER $$
 CREATE PROCEDURE delete_blog(IN p_blog_id INT)
 BEGIN
@@ -190,6 +167,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_user_blogs;
 DELIMITER $$
 CREATE PROCEDURE get_user_blogs(IN p_user_id INT)
 BEGIN
@@ -197,7 +175,8 @@ BEGIN
 END $$
 DELIMITER ;
 
--- COMMENTS
+
+DROP PROCEDURE IF EXISTS get_comments_by_blog_id;
 DELIMITER $$
 CREATE PROCEDURE get_comments_by_blog_id(IN p_blog_id INT)
 BEGIN
@@ -205,6 +184,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS create_comment;
 DELIMITER $$
 CREATE PROCEDURE create_comment(IN p_blog_id INT, IN p_user_id INT, IN p_body TEXT)
 BEGIN
@@ -213,6 +193,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS update_comment;
 DELIMITER $$
 CREATE PROCEDURE update_comment(IN p_comment_id INT, IN p_body TEXT)
 BEGIN
@@ -220,6 +201,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS delete_comment;
 DELIMITER $$
 CREATE PROCEDURE delete_comment(IN p_comment_id INT)
 BEGIN
@@ -227,7 +209,7 @@ BEGIN
 END $$
 DELIMITER ;
 
--- CATEGORIES
+DROP PROCEDURE IF EXISTS get_all_categories;
 DELIMITER $$
 CREATE PROCEDURE get_all_categories()
 BEGIN
@@ -235,6 +217,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS create_category;
 DELIMITER $$
 CREATE PROCEDURE create_category(IN p_name VARCHAR(255), IN p_description VARCHAR(255))
 BEGIN
@@ -242,6 +225,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_category_by_id;
 DELIMITER $$
 CREATE PROCEDURE get_category_by_id(IN p_category_id INT)
 BEGIN
@@ -249,6 +233,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS update_category;
 DELIMITER $$
 CREATE PROCEDURE update_category(IN p_category_id INT, IN p_name VARCHAR(255), IN p_description VARCHAR(255))
 BEGIN
@@ -256,6 +241,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS delete_category;
 DELIMITER $$
 CREATE PROCEDURE delete_category(IN p_category_id INT)
 BEGIN
@@ -263,7 +249,8 @@ BEGIN
 END $$
 DELIMITER ;
 
--- FOLLOWS
+
+DROP PROCEDURE IF EXISTS get_user_follows;
 DELIMITER $$
 CREATE PROCEDURE get_user_follows(IN p_user_id INT)
 BEGIN
@@ -273,6 +260,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS follow_user;
 DELIMITER $$
 CREATE PROCEDURE follow_user(IN p_user_id INT, IN p_follow_id INT)
 BEGIN
@@ -281,6 +269,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS unfollow_user;
 DELIMITER $$
 CREATE PROCEDURE unfollow_user(IN p_user_id INT, IN p_follow_id INT)
 BEGIN
@@ -288,7 +278,8 @@ BEGIN
 END $$
 DELIMITER ;
 
--- ROLES
+
+DROP PROCEDURE IF EXISTS get_all_roles;
 DELIMITER $$
 CREATE PROCEDURE get_all_roles()
 BEGIN
@@ -296,6 +287,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS create_role;
 DELIMITER $$
 CREATE PROCEDURE create_role(IN p_role VARCHAR(50))
 BEGIN
@@ -303,6 +295,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_role_by_id;
 DELIMITER $$
 CREATE PROCEDURE get_role_by_id(IN p_role_id INT)
 BEGIN
@@ -310,6 +303,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS delete_role;
 DELIMITER $$
 CREATE PROCEDURE delete_role(IN p_role_id INT)
 BEGIN
@@ -317,6 +311,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_user_roles;
 DELIMITER $$
 CREATE PROCEDURE get_user_roles(IN p_user_id INT)
 BEGIN
@@ -326,6 +321,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS add_role_to_user;
 DELIMITER $$
 CREATE PROCEDURE add_role_to_user(IN p_user_id INT, IN p_role_id INT)
 BEGIN
@@ -333,6 +329,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS remove_role_from_user;
 DELIMITER $$
 CREATE PROCEDURE remove_role_from_user(IN p_user_id INT, IN p_role_id INT)
 BEGIN
@@ -340,7 +338,8 @@ BEGIN
 END $$
 DELIMITER ;
 
--- ACTIVITIES
+
+DROP PROCEDURE IF EXISTS get_all_activities;
 DELIMITER $$
 CREATE PROCEDURE get_all_activities()
 BEGIN
@@ -348,6 +347,8 @@ BEGIN
 END $$
 DELIMITER ;
 
+
+DROP PROCEDURE IF EXISTS log_activity;
 DELIMITER $$
 CREATE PROCEDURE log_activity(IN p_user_id INT, IN p_action VARCHAR(255))
 BEGIN

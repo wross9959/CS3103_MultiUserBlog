@@ -31,13 +31,14 @@ class verify(Resource):
             appURL = f"http://{appURL}:{appPort}/verify/{result[0]['token']}"
 
             token = result[0]['token']
-            subject = "UNB Blog Verfiy your account"
+            subject = "UNB Blog Verify your account"
             body = f"""
 Hi {first_name}, 
 
-Your verification code is:
-{token}
-Click the link to verify your account: {appURL}
+Your verification code is: {token}
+
+Click the link to verify your account: 
+{appURL}
             
 Thanks, 
 UNB Blog Support

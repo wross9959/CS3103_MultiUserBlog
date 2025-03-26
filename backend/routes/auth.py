@@ -3,6 +3,7 @@
 from flask import request, session, make_response, jsonify, abort
 from flask_restful import Resource
 from db_util import db_access
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 
@@ -16,8 +17,9 @@ class SignIn(Resource):
 
 
         try:
-            user = db_access('login_user', [data['email'], data['password']])
-            if user:
+            user = db_access('get_user_by_email', [data['email']])
+            
+            if user and check_password_hash(user[0]['password'], data['password']):
                 user = user[0]
                 session['user_id'] = user['id']
                 session['username'] = user['username']
