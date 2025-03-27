@@ -18,7 +18,7 @@ export default {
             .then(data => {
                 this.post = data
                 this.post.created_at = new Date(this.post.created_at).toLocaleDateString()
-                this.post.image = `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
+                this.post.image = this.post.image_url ||`/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
                 
                 fetch(`/api/users/${this.post.user_id}`)
                     .then(response => response.json())

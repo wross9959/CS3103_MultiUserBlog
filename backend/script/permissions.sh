@@ -11,6 +11,7 @@ echo "----------------------------------------"
 echo "Updating permissions for all main python files"
 echo ""
 chmod +x ../*.py
+chmod +x ../utils/*.py
 echo "All python main files are now executable!"
 echo "----------------------------------------"
 

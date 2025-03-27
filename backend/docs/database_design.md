@@ -350,10 +350,10 @@ END
 
 #### `create_blog`
 ```sql
-CREATE PROCEDURE create_blog(IN p_title VARCHAR(255), IN p_body TEXT, IN p_user_id INT, IN p_status VARCHAR(50))
+CREATE PROCEDURE create_blog(IN p_title VARCHAR(255), IN p_body TEXT, IN p_user_id INT, IN p_status VARCHAR(50), IN p_image_url VARCHAR(255))
 BEGIN
-    INSERT INTO blogs (title, body, user_id, status, created_at)
-    VALUES (p_title, p_body, p_user_id, p_status, NOW());
+    INSERT INTO blogs (title, body, user_id, status, image_url, created_at)
+    VALUES (p_title, p_body, p_user_id, p_status, p_image_url, NOW());
 END
 ```
 
@@ -367,9 +367,9 @@ END
 
 #### `update_blog`
 ```sql
-CREATE PROCEDURE update_blog(IN p_blog_id INT, IN p_title VARCHAR(255), IN p_body TEXT, IN p_status VARCHAR(50))
+CREATE PROCEDURE update_blog(IN p_blog_id INT, IN p_title VARCHAR(255), IN p_body TEXT, IN p_status VARCHAR(50), IN p_image_url VARCHAR(255))
 BEGIN
-    UPDATE blogs SET title = p_title, body = p_body, status = p_status WHERE id = p_blog_id;
+    UPDATE blogs SET title = p_title, body = p_body, status = p_status, image_url = p_image_url WHERE id = p_blog_id;
 END
 ```
 

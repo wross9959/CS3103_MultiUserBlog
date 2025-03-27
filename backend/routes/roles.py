@@ -2,7 +2,7 @@
 
 from flask import request, jsonify, make_response, abort
 from flask_restful import Resource
-from db_util import db_access
+from utils.db_util import db_access
 
 
 class RoleList(Resource):

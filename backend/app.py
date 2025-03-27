@@ -10,9 +10,9 @@ import cgi
 import sys
 cgitb.enable()
 
+
 # All flask setup 
 app = Flask(__name__, static_url_path='/static', static_folder='../frontend')
-app.secret_key = settings.SECRET_KEY
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_COOKIE_NAME'] = 'The Cookie Monster'

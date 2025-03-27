@@ -27,7 +27,7 @@ export default {
 
             this.blogs = blogData.map(blog => {
                 if (!blog.image) {
-                    blog.image = `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
+                    blog.image = blog.image_url ||`/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
                 }
                 return blog;
             });
