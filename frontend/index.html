@@ -18,6 +18,9 @@
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <!-- Logo  -->
     <link rel="icon" type="image/svg+xml" href="/static/images/logo.ico" />
 
@@ -35,13 +38,24 @@
                 </div>
                 <div class="main-menu">
                     <ul>
-                        <li class="navbar-item">
-                            <a href="/" class="navbar-link">Home</a>
+                        <li v-if="authenticated">
+                            <a class="btn" href="/create">
+                                <i class="fas fa-plus" style="background-color: #00000000;"></i>
+                                <span>New Post</span>
+                            </a>
                         </li>
                         <li>
-                            <a class="btn btn-dark" href="#">
+                            <a class="btn" href="/profile" v-if="authenticated">
                                 <i class="fas fa-user" style="background-color: #00000000;"></i>
-                                Log in
+                            </a>
+                            <a class="btn" @click="showLoginModal=true" v-else>
+                                <i class="fas fa-user" style="background-color: #00000000;"></i>
+                                <span>Log in / Register</span>
+                            </a>
+                        </li>
+                        <li v-if="authenticated">
+                            <a class="btn" href="/logout">
+                                <i class="fas fa-sign-out-alt" style="background-color: #00000000;"></i>
                             </a>
                         </li>
                     </ul>
@@ -50,22 +64,7 @@
         </nav>
 
         <div class="container">
-
-
-            <a class="feature-link" href="#">
-                <div class="feature">
-                    <div class="feature-image">
-                        <img src="/static/images/covers/IMG_2698.jpg" alt="Feature Image">
-                    </div>
-                    <div class="feature-text">
-                        <h1>Featured Blog Title</h1>
-                        <p>2025-03-23</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    </div>
-                </div>
-            </a>
+            <!-- <feature :post="featured"></feature> -->
 
             <div class="content">
                 <h1>Recent Posts</h1>
@@ -76,6 +75,8 @@
                 </div>
             </div>
         </div>
+
+        <login-modal v-if="showLoginModal" @close="showLoginModal=false" @login="authenticated=true"></login-modal>
     </div>
 
     <script type="importmap">
@@ -88,41 +89,44 @@
 
     <script type="module">
         import { createApp } from 'vue'
+        import LoginModal from '/static/js/components/login-modal.js'
         import BlogCard from '/static/js/components/blog-card.js'
+        import BlogPost from '/static/js/components/blog-post.js'
+        import Feature from '/static/js/components/feature.js'
 
         createApp({
             components: {
-                BlogCard
+                LoginModal,
+                BlogCard,
+                BlogPost,
+                Feature
             },
             data() {
                 return {
-                    posts: [
-                        { title: 'Post 1', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 2', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 3', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 4', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 5', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 6', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 7', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 8', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 9', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 10', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 11', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                        { title: 'Post 12', created_at: '2025-03-23', body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' },
-                    ]
+                    posts: [],
+                    featured: {},
+                    showLoginModal: false,
+                    authenticated: false
                 }
             },
-            // mounted() {
-            //     fetch('/api/blogs')
-            //         .then(response => response.json())
-            //         .then(data => {
-            //             this.posts = data
+            mounted() {
+                fetch('/api/blogs')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.posts = data
 
-            //             this.posts.forEach(post => {
-            //                 post.created_at = new Date(post.created_at).toLocaleDateString()
-            //             })
-            //         })
-            // }
+                        this.posts.forEach(post => {
+                            post.created_at = new Date(post.created_at).toLocaleDateString()
+
+                            // Randomly select a banner image - maybe this should be done on the backend
+                            post.image = `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`
+                        })
+
+                        this.featured = this.posts[Math.floor(Math.random() * this.posts.length)]
+                    })
+            }
         }).mount('#app')
     </script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
