@@ -73,4 +73,5 @@ activities.routes(api)
 
 # main for app
 if __name__ == '__main__':
-    app.run(host=settings.APP_HOST, port=settings.APP_PORT, debug=settings.APP_DEBUG)
+    context = ('cert.pem', 'key.pem')
+    app.run(host=settings.APP_HOST, port=settings.APP_PORT, debug=settings.APP_DEBUG, ssl_context=context)

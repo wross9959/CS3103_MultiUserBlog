@@ -4,7 +4,9 @@ from flask import request, session, make_response, jsonify, abort
 from flask_restful import Resource
 from db_util import db_access
 from email_util import send_email
+from werkzeug.security import generate_password_hash
 import settings
+
 
 class resetPassword(Resource):
 
@@ -16,6 +18,7 @@ class resetPassword(Resource):
         try:
             user_id = session['user_id']
             email = session['email']
+            first_name = session.get('first_name', 'user')
             result = db_access('gen_password_token', [user_id, email])
 
             if not result or 'token' not in result[0]:
@@ -26,8 +29,8 @@ class resetPassword(Resource):
             appURL = f"http://{appURL}:{appPort}/verify/{result[0]['token']}"
 
             token = result[0]['token']
-            subject = "UNB Blog Verfiy your account"
-            body = "Hi {first_name}, \n\n Your password reset code is: \n {token} \n\n Click the link to change your account: {appURL} \n\n Thanks,\n UNB Blog Support \n\n This is an automated message, please do not response"
+            subject = "UNB Blog Verify your account"
+            body = f"Hi {first_name}, \n\n Your password reset code is: \n {token} \n\n Click the link to change your account: {appURL} \n\n Thanks,\n UNB Blog Support \n\n This is an automated message, please do not response"
             
             if send_email(email, subject, body):
                 return make_response(jsonify({"status": "success"}), 200)
@@ -47,7 +50,8 @@ class resetPassword(Resource):
             abort(400)
         
         try:
-            results = db_access('reset_password', [session['user_id'], data['token'], data['new_password']])
+            hash_pwd = generate_password_hash(data['new_password'])
+            results = db_access('reset_password', [session['user_id'], data['token'], hash_pwd])
 
             if results and results[0]['status'] == 'success':
                 return make_response(jsonify({"status": "Password reset"}), 200)

@@ -219,6 +219,8 @@ image {
 
 .post-banner img {
     width: 100%;
+    height: 20rem;
+    object-fit: cover;
 }
 
 /* Modal */
@@ -269,6 +271,24 @@ image {
     cursor: pointer;
 }
 
+#register-link {
+    text-align: center;
+    color: var(--primary-color);
+}
+
+#reset-link {
+    text-align: left;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+}
+
+.error-message {
+    color: var(--danger-color);
+    font-weight: 400;
+    font-size: 0.8rem;
+}
+
+/* Forms */
 form {
     display: flex;
     flex-direction: column;
@@ -294,13 +314,16 @@ input[type="password"] {
     font-family: 'Poppins', sans-serif;
 }
 
-#register-link {
-    text-align: center;
-    color: var(--primary-color);
-}
-
-.error-message {
-    color: var(--danger-color);
-    font-weight: 400;
-    font-size: 0.8rem;
+textarea {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    height: 20rem;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    font-family: 'Poppins', sans-serif;
 }

@@ -86,13 +86,15 @@
         import BlogCard from '/static/js/components/blog-card.js'
         import BlogPost from '/static/js/components/blog-post.js'
         import Feature from '/static/js/components/feature.js'
+
         import Home from '/static/js/pages/home.js'
+        import CreatePost from '/static/js/pages/create-post.js'
 
         const router = createRouter({
             history: createWebHistory(),
             routes: [
                 { path: '/', component: Home },
-                { path: '/create', component: BlogPost },
+                { path: '/create', component: CreatePost },
                 { path: '/blog/:id', name: 'blog', component: BlogPost, props: true }
             ]
         })

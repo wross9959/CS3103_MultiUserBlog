@@ -11,7 +11,7 @@ export default {
         <div class="feature-text">
           <h1>{{ post.title }}</h1>
           <p>{{ post.created_at }}</p>
-          <p>{{ post.body }}</p>
+          <p>{{ post.body.substring(0, 250).trim() + "..." }}</p>
         </div>
       </div>
     </router-link>`

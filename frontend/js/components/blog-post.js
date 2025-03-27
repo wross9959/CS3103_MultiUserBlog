@@ -4,21 +4,22 @@ export default {
     },
     data() {
         return {
-            post: { id: 1, title: "Post 1", body: "This is the first post", created_at: "2021-01-01", image: "/static/images/banners/banner-1.jpg" }
+            post: { }
         }
     },
-    mounted() {
-        // fetch(`/api/blogs/${this.id}`)
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         this.post = data
-        //         this.post.created_at = new Date(this.post.created_at).toLocaleDateString()
-        //     })
+    created() {
+        fetch(`/api/blogs/${this.id}`)
+            .then(response => response.json())
+            .then(data => {
+                this.post = data
+                this.post.created_at = new Date(this.post.created_at).toLocaleDateString()
+                this.post.image = `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
+            })
     },
     template: `
     <div class="post container">
         <div class="post-banner">
-            <img :src="post.image" alt="Post Cover Image">
+            <img :src="post.image" alt="Post Banner">
         </div>
         <div class="post-header">
             <h1>{{ post.title }}</h1>
