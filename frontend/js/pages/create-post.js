@@ -55,7 +55,7 @@ export default {
                         <label for="draft" class="switch-label">Draft</label>
                     </div>
                 </div>
-                <div class="btn-group">
+                <div class="btn-group-h">
                     <button type="button" class="btn btn-secondary btn-wide" @click="$router.push('/')">Cancel</button>
                     <button type="submit" class="btn btn-accent btn-wide">Post</button>
                 </div>

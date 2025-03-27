@@ -505,13 +505,13 @@ export default {
       <h2>Register</h2>
       <form id="register-form" @submit="registerUser">
         <div class="form-group">
-            <label for="first_name">First Name</label>
-            <input type="text" id="first_name" name="first_name" v-model="registerVals.first_name" required @blur="dirtyFirstName = true">
+            <label for="first-name">First Name</label>
+            <input type="text" id="first-name" name="first_name" v-model="registerVals.first_name" required @blur="dirtyFirstName = true">
             <p v-if="registerErrors.first_name" class="error-message">{{ registerErrors.first_name }}</p>
           </div>
           <div class="form-group">
-            <label for="last_name">Last Name</label>
-            <input type="text" id="last_name" name="last_name" v-model="registerVals.last_name" required @blur="dirtyLastName = true">
+            <label for="last-name">Last Name</label>
+            <input type="text" id="last-name" name="last_name" v-model="registerVals.last_name" required @blur="dirtyLastName = true">
             <p v-if="registerErrors.last_name" class="error-message">{{ registerErrors.last_name }}</p>
           </div>
           <div class="form-group">
@@ -530,12 +530,14 @@ export default {
             <p v-if="registerErrors.password" class="error-message">{{ registerErrors.password }}</p>
           </div>
           <div class="form-group">
-            <label for="confirm_password">Confirm Password</label>
-            <input type="password" id="confirm_password" name="confirm_password" v-model="registerVals.confirm_password" required @blur="dirtyConfirmPassword = true">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" id="confirm-password" name="confirm_password" v-model="registerVals.confirm_password" required @blur="dirtyConfirmPassword = true">
             <p v-if="registerErrors.confirm_password" class="error-message">{{ registerErrors.confirm_password }}</p>
           </div>
-          <button type="submit" class="btn btn-success" :disabled="registerDisabled">Register</button>
-          <button type="button" class="btn btn-dark" @click="$emit('close')">Cancel</button>
+          <div class="btn-group-v">
+            <button type="submit" class="btn btn-success" :disabled="registerDisabled">Register</button>
+            <button type="button" class="btn btn-dark" @click="$emit('close')">Cancel</button>
+          </div>  
       </form>
       <a href="#" @click="() => showRegister = !showRegister" id="register-link">Already have an account?</a>
     </div>
