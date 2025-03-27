@@ -30,6 +30,7 @@ CREATE TABLE blogs (
     body TEXT NOT NULL,
     user_id INT NOT NULL,
     status VARCHAR(50),
+    ADD COLUMN image_url VARCHAR(255);
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );

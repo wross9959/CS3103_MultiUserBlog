@@ -2,7 +2,8 @@
 
 from flask import request, session, jsonify, make_response, abort
 from flask_restful import Resource
-from db_util import db_access
+from werkzeug.utils import secure_filename
+from utils.db_util import db_access
 
 
 
@@ -28,8 +29,10 @@ class BlogList(Resource):
         if not data or not all(field in data for field in req_fields):
             abort(400)
 
+        image_url = data.get('image_url')
+
         try: 
-            db_access('create_blog', [data['title'], data['body'], session['user_id'], data['status']])
+            db_access('create_blog', [data['title'], data['body'], session['user_id'], data['status'], image_url])
             return make_response(jsonify({"status": "Blog created"}), 201)
         except Exception as e:
             return make_response(jsonify({"status": "error", "message": str(e)}), 500)
@@ -61,8 +64,10 @@ class BlogById(Resource):
         if not data or not all(field in data for field in req_fields):
             abort(400)
 
+        image_url = data.get('image_url')
+
         try:
-            db_access('update_blog', [blog_id, data['title'], data['body'], data['status']])
+            db_access('update_blog', [blog_id, data['title'], data['body'], data['status'], image_url])
             return make_response(jsonify({"status": "Blog updated"}), 200)
         except Exception as e:
             return make_response(jsonify({"status": "error", "message": str(e)}), 500)

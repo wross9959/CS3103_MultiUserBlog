@@ -23,7 +23,7 @@ export default {
                     post.created_at = new Date(post.created_at).toLocaleDateString();
 
                     // Randomly select a banner image - maybe this should be done on the backend
-                    post.image = `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
+                    post.image = post.image_url || `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
 
                     // Get the username of the author
                     if (!usernames[post.user_id]) {

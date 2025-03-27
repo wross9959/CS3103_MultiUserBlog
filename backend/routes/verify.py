@@ -2,9 +2,9 @@
 
 from flask import request, session, jsonify, abort, make_response
 from flask_restful import Resource
-from db_util import db_access
+from utils.db_util import db_access
 import settings
-from email_util import send_email
+from utils.email_util import send_email
 
 
 

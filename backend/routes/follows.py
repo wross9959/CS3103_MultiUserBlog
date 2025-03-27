@@ -1,7 +1,7 @@
 #/usr/bin/env python
 from flask import session, make_response, jsonify, abort
 from flask_restful import Resource
-from db_util import db_access
+from utils.db_util import db_access
 
 
 class Following(Resource):

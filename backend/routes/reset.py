@@ -2,8 +2,8 @@
 
 from flask import request, session, make_response, jsonify, abort
 from flask_restful import Resource
-from db_util import db_access
-from email_util import send_email
+from utils.db_util import db_access
+from utils.email_util import send_email
 import settings
 
 class resetPassword(Resource):

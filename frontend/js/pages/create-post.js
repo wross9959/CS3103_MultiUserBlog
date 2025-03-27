@@ -7,6 +7,7 @@ export default {
                 title: "",
                 body: "",
                 draft: true,
+                image_url: "",
             },
             isEditing: false,
         }
@@ -20,6 +21,7 @@ export default {
                 this.formData.title = blog.title;
                 this.formData.body = blog.body;
                 this.formData.draft = blog.status === "draft";
+                this.formData.image_url = blog.image_url || "";
             } else {
                 alert("Failed to fetch blog data!");
             }
@@ -33,7 +35,8 @@ export default {
             let requestBody = {
                 title: this.formData.title,
                 body: this.formData.body,
-                status: this.formData.draft ? "draft" : "published"
+                status: this.formData.draft ? "draft" : "published",
+                image_url: this.formData.image_url || ""
             }
 
             // Allow for put or post methods
@@ -76,6 +79,10 @@ export default {
                 <div class="form-group">
                     <label for="body">Body</label>
                     <textarea class="form-control" id="body" name="body" v-model="formData.body" placeholder="Write something..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image_url">Cover Image URL (optional)</label>
+                    <input type="text" class="form-control" id="image_url" v-model="formData.image_url" placeholder="https://example.com/image.jpg">
                 </div>
                 <div class="form-switch">
                     <p class="switch-visible-label">Draft</p>

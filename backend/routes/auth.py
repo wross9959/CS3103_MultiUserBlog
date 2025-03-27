@@ -2,7 +2,7 @@
 
 from flask import request, session, make_response, jsonify, abort
 from flask_restful import Resource
-from db_util import db_access
+from utils.db_util import db_access
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
