@@ -24,16 +24,24 @@ class Users(Resource):
         
         data = request.get_json()
         if not data:
-            abort(400)
+            return make_response(jsonify({
+            'status': 'fail',
+            'message': 'Missing request body.'
+            }), 400)
+
 
         req_fields = ['username', 'password', 'email', 'first_name', 'last_name']
 
         if not all(field in data for field in req_fields):
-            abort(400, 'Missing required fields')
+            return make_response(jsonify({
+                'status': 'fail',
+                'message': 'Missing required fields.'
+            }), 400)
+
         
         try:
             hash_pwd = generate_password_hash(data['password'])
-            db_access('create_user', [
+            result = db_access('create_user', [
                 data['username'],
                 data['email'],
                 data['first_name'],
@@ -41,7 +49,14 @@ class Users(Resource):
                 hash_pwd,
                 False, # note for store procedure this is account active, not true until verify
                 False, # note this is admin same as above ^
-            ])
+            ]);
+
+            if result is None:
+                return make_response(jsonify({
+                    'status': 'fail',
+                    'message': 'User already exists.'
+                }), 400);
+            
             response = {'status': 'User created'}
             responseCode = 201
 

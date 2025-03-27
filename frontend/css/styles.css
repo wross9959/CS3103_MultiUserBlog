@@ -408,8 +408,8 @@ input[type="password"] {
     margin: 10px 0;
     border: none;
     border-radius: 5px;
-    background-color: var(--light-color);
-    color: var(--dark-color);
+    background-color: var(--secondary-color);
+    color: var(--light-color);
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
 }
@@ -423,8 +423,8 @@ textarea {
     height: 20rem;
     border: none;
     border-radius: 5px;
-    background-color: var(--light-color);
-    color: var(--dark-color);
+    background-color: var(--secondary-color);
+    color: var(--light-color);
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
 }

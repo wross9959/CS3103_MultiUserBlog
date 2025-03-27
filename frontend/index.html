@@ -89,15 +89,19 @@
 
         import Home from '/static/js/pages/home.js'
         import CreatePost from '/static/js/pages/create-post.js'
+        import Profile from '/static/js/pages/profile.js'
 
         const router = createRouter({
             history: createWebHistory(),
             routes: [
                 { path: '/', component: Home },
                 { path: '/create', component: CreatePost },
-                { path: '/blog/:id', name: 'blog', component: BlogPost, props: true }
+                { path: '/edit-post/:id', name: 'edit', component: CreatePost, props: true },
+                { path: '/blog/:id', name: 'blog', component: BlogPost, props: true },
+                { path: '/profile', name: 'profile', component: Profile }
             ]
-        })
+        });
+
 
         createApp({
             components: {
