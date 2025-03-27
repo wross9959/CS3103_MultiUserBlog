@@ -38,7 +38,7 @@
                 </div>
                 <div class="main-menu">
                     <ul>
-                        <li v-if="authenticated">
+                        <li v-if="verified">
                             <router-link class="btn" to="/create">
                                 <i class="fas fa-plus" style="background-color: #00000000;"></i>
                                 <span>New Post</span>
@@ -65,7 +65,7 @@
 
         <router-view></router-view>
 
-        <login-modal v-if="showLoginModal" @close="showLoginModal=false" @login="authenticated=true"></login-modal>
+        <login-modal v-if="showLoginModal" @close="showLoginModal=false" @login="handleLogin"></login-modal>
     </div>
 
     <script type="importmap">
@@ -110,7 +110,30 @@
             data() {
                 return {
                     showLoginModal: false,
-                    authenticated: false
+                    authenticated: false,
+                    verified: false
+                }
+            },
+            methods: {
+                handleLogin(verified) {
+                    this.authenticated = true;
+                    this.verified = verified;
+                    this.showLoginModal = false;
+
+                    if (!this.verified) {
+                        Toastify({
+                            text: `You must verify your email before you can create posts and comments.`,
+                            duration: 3000,
+                            close: true,
+                            gravity: "top",
+                            position: "center",
+                            stopOnFocus: true,
+                            style: {
+                                background: "#ffc107",
+                                boxShadow: "0.3rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1)"
+                            }
+                        }).showToast();
+                    }
                 }
             }
         }).use(router).mount('#app')

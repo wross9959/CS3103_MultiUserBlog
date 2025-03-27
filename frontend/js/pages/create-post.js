@@ -1,6 +1,7 @@
 export default {
     data() {
         return {
+            userVerified: false,
             formData: {
                 title: "",
                 body: "",
@@ -47,12 +48,17 @@ export default {
                     <label for="body">Body</label>
                     <textarea class="form-control" id="body" name="body" v-model="formData.body" placeholder="Write something..."></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="draft">Draft</label>
-                    <input type="checkbox" id="draft" name="draft" v-model="formData.draft">
+                <div class="form-switch">
+                    <p class="switch-visible-label">Draft</p>
+                    <div class="switch">
+                        <input type="checkbox" id="draft" class="switch-input" name="draft" v-model="formData.draft" />
+                        <label for="draft" class="switch-label">Draft</label>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" class="btn btn-secondary" @click="$router.push('/')">Cancel</button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary btn-wide" @click="$router.push('/')">Cancel</button>
+                    <button type="submit" class="btn btn-accent btn-wide">Post</button>
+                </div>
             </form>
         </div>`
 }

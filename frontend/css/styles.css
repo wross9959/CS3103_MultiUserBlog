@@ -10,7 +10,7 @@
 
 /* Custom Props */
 :root {
-    --primary-color: #6EACDA;
+    --primary-color: #6eacda;
     --accent-color: #c24b4c;
     --secondary-color: #333;
     --light-color: #f4f4f4;
@@ -131,7 +131,12 @@ image {
 
 .btn-primary {
     background-color: var(--primary-color);
-    color: var(--dark-color);
+    color: var(--light-color);
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    color: var(--light-color);
 }
 
 .btn-dark {
@@ -152,6 +157,85 @@ image {
 .btn-block {
     display: block;
     width: 100%;
+}
+
+.btn-wide {
+    width: 10rem;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Switches */
+.form-switch {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+}
+
+.switch-input {
+    display: none;
+}
+
+.switch-label {
+    display: block;
+    width: 48px;
+    height: 24px;
+    text-indent: -150%;
+    clip: rect(0 0 0 0);
+    color: transparent;
+    user-select: none;
+    margin: 0;
+}
+
+.switch-label::before,
+.switch-label::after {
+    content: "";
+    display: block;
+    position: absolute;
+    cursor: pointer;
+}
+
+.switch-label::before {
+    width: 100%;
+    height: 100%;
+    background-color: #dedede;
+    border-radius: 9999em;
+    -webkit-transition: background-color 0.25s ease;
+    transition: background-color 0.25s ease;
+}
+
+.switch-label::after {
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
+    -webkit-transition: left 0.25s ease;
+    transition: left 0.25s ease;
+}
+
+.switch-input:checked+.switch-label::before {
+    background-color: var(--accent-color);
+}
+
+.switch-input:checked+.switch-label::after {
+    left: 24px;
+}
+
+.switch-visible-label {
+    font-weight: 600;
 }
 
 /* Content */
@@ -181,6 +265,10 @@ image {
     height: auto;
 }
 
+.feature-body {
+    margin-top: 0.5rem;
+}
+
 /* Post cards */
 .post-cards {
     display: grid;
@@ -197,6 +285,10 @@ image {
 
 .post-card-content {
     padding: 0 1rem 1rem;
+}
+
+.post-card-body {
+    margin-top: 0.5rem;
 }
 
 .post-card-banner img {
@@ -221,6 +313,13 @@ image {
     width: 100%;
     height: 20rem;
     object-fit: cover;
+}
+
+.post-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
 }
 
 /* Modal */
@@ -312,6 +411,7 @@ input[type="password"] {
     background-color: var(--light-color);
     color: var(--dark-color);
     font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
 }
 
 textarea {
@@ -326,4 +426,5 @@ textarea {
     background-color: var(--light-color);
     color: var(--dark-color);
     font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
 }

@@ -208,8 +208,11 @@ export default {
       });
 
       if (response.ok) {
+        let data = await response.json();
+        let user_verified = data.user.active;
+
         this.$emit('close');
-        this.$emit('login');
+        this.$emit('login', user_verified);
         Toastify({
           text: `Logged In Successfully!`,
           duration: 3000,
@@ -548,7 +551,7 @@ export default {
       <form id="verify-form" @submit="verifyUser">
         <div class="form-group">
           <label for="token">Verification Code</label>
-          <input type="text" id="token" name="token" v-model="token" required>
+          <input type="text" id="token" name="token" v-model="verifyToken" required>
         </div>
         <button type="submit" class="btn btn-success" :disabled="verifyDisabled">Verify</button>
       </form>
