@@ -98,4 +98,4 @@ class UserBlogs(Resource):
 def routes(api):
     api.add_resource(BlogList, '/api/blogs')
     api.add_resource(BlogById, '/api/blogs/<int:blog_id>')
-    api.add_resource(UserBlogs, '/api/blogs/<int:user_id>')
+    api.add_resource(UserBlogs, '/api/users/<int:user_id>/blogs')

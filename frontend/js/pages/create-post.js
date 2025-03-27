@@ -1,4 +1,5 @@
 export default {
+    props: ['id'],
     data() {
         return {
             userVerified: false,
@@ -6,11 +7,27 @@ export default {
                 title: "",
                 body: "",
                 draft: true,
-            }
+            },
+            isEditing: false,
         }
     },
+    async created() {
+        if ( this.id ) {
+            this.isEditing = true;
+            const res = await fetch(`/api/blogs/${this.id}`);
+            if (res.ok) {
+                const blog = await res.json();
+                this.formData.title = blog.title;
+                this.formData.body = blog.body;
+                this.formData.draft = blog.status === "draft";
+            } else {
+                alert("Failed to fetch blog data!");
+            }
+        }
+
+    },
     methods: {
-        async createPost(event) {
+        async createUpdatePost(event) {
             event.preventDefault();
 
             let requestBody = {
@@ -19,8 +36,20 @@ export default {
                 status: this.formData.draft ? "draft" : "published"
             }
 
-            const response = await fetch('/api/blogs', {
-                method: 'POST',
+            // Allow for put or post methods
+            let url = '/api/blogs';
+            let method = 'POST';
+
+
+            // If we are editing a post will add the id on the url and update method
+            if (this.isEditing) {
+                url = `/api/blogs/${this.id}`;
+                method = 'PUT';
+            }
+            
+
+            const response = await fetch(url, {
+                method,
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -28,18 +57,18 @@ export default {
             });
 
             if (response.ok) {
-                alert("Post created successfully!");
+                alert(`Post ${this.isEditing ? 'updated' : 'created'} successfully!`);
                 this.$router.push('/');
             }
             else {
-                alert("Failed to create post!");
+                alert(`Failed to ${this.isEditing ? 'update' : 'create'} post!`);
             }
         }
     },
     template: `
         <div class="container">
-            <h1>Create Post</h1>
-            <form id="create-post-form" @submit="createPost">
+            <h1>{{ isEditing ? 'Edit Post' : 'Create Post' }}</h1>
+            <form id="create-post-form" @submit="createUpdatePost">
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" class="form-control" id="title" name="title" v-model="formData.title" placeholder="Title...">
@@ -57,7 +86,7 @@ export default {
                 </div>
                 <div class="btn-group-h">
                     <button type="button" class="btn btn-secondary btn-wide" @click="$router.push('/')">Cancel</button>
-                    <button type="submit" class="btn btn-accent btn-wide">Post</button>
+                    <button type="submit" class="btn btn-accent btn-wide">{{ isEditing ? 'Update' : 'Post' }}</button>
                 </div>
             </form>
         </div>`

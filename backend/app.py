@@ -10,6 +10,7 @@ import cgi
 import sys
 cgitb.enable()
 
+# All flask setup 
 app = Flask(__name__, static_url_path='/static', static_folder='../frontend')
 app.secret_key = settings.SECRET_KEY
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -17,6 +18,7 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_COOKIE_NAME'] = 'The Cookie Monster'
 app.config['SESSION_COOKIE_DOMAIN'] = settings.APP_HOST
 Session(app)
+
 
 api = Api(app)
 
@@ -36,8 +38,7 @@ def forbidden(error):
 @app.errorhandler(404)
 def not_found(error):
     return make_response(jsonify({'status': 'Resource not found'}), 404)
-
-# serve the index.html file on the root route
+    
 @app.route('/', methods=['GET'])
 def index():
     return app.send_static_file('index.html')
@@ -73,5 +74,4 @@ activities.routes(api)
 
 # main for app
 if __name__ == '__main__':
-    context = ('cert.pem', 'key.pem')
-    app.run(host=settings.APP_HOST, port=settings.APP_PORT, debug=settings.APP_DEBUG, ssl_context=context)
+    app.run(host=settings.APP_HOST, port=settings.APP_PORT, debug=settings.APP_DEBUG)

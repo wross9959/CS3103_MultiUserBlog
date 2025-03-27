@@ -260,6 +260,20 @@ BEGIN
 END $$
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS get_user_followers;
+DELIMITER $$
+
+CREATE PROCEDURE get_user_followers(IN p_user_id INT)
+BEGIN
+    SELECT u.*
+    FROM follows f
+    JOIN users u ON f.follower_id = u.id
+    WHERE f.followed_id = p_user_id;
+END $$
+
+DELIMITER ;
+
+
 DROP PROCEDURE IF EXISTS follow_user;
 DELIMITER $$
 CREATE PROCEDURE follow_user(IN p_user_id INT, IN p_follow_id INT)
