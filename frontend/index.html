@@ -32,49 +32,38 @@
         <nav class="navbar">
             <div class="container">
                 <div class="logo">
-                    <a href="/">
+                    <router-link to="/">
                         <img src="/static/images/logo.png" alt="Home">
-                    </a>
+                    </router-link>
                 </div>
                 <div class="main-menu">
                     <ul>
                         <li v-if="authenticated">
-                            <a class="btn" href="/create">
+                            <router-link class="btn" to="/create">
                                 <i class="fas fa-plus" style="background-color: #00000000;"></i>
                                 <span>New Post</span>
-                            </a>
+                            </router-link>
                         </li>
                         <li>
-                            <a class="btn" href="/profile" v-if="authenticated">
+                            <router-link class="btn" to="/profile" v-if="authenticated">
                                 <i class="fas fa-user" style="background-color: #00000000;"></i>
-                            </a>
+                            </router-link>
                             <a class="btn" @click="showLoginModal=true" v-else>
                                 <i class="fas fa-user" style="background-color: #00000000;"></i>
                                 <span>Log in / Register</span>
                             </a>
                         </li>
                         <li v-if="authenticated">
-                            <a class="btn" href="/logout">
+                            <router-link class="btn" to="/logout">
                                 <i class="fas fa-sign-out-alt" style="background-color: #00000000;"></i>
-                            </a>
+                            </router-link>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
-        <div class="container">
-            <!-- <feature :post="featured"></feature> -->
-
-            <div class="content">
-                <h1>Recent Posts</h1>
-                <div class="posts">
-                    <div class="post" v-for="post in posts">
-                        <blog-card :post="post"></blog-card>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <router-view></router-view>
 
         <login-modal v-if="showLoginModal" @close="showLoginModal=false" @login="authenticated=true"></login-modal>
     </div>
@@ -82,50 +71,47 @@
     <script type="importmap">
         {
             "imports": {
-              "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+                "vue":               "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+                "vue-router":        "https://cdnjs.cloudflare.com/ajax/libs/vue-router/4.1.5/vue-router.esm-browser.min.js",
+                "@vue/devtools-api": "https://unpkg.com/@vue/devtools-api@6.4.5/lib/esm/index.js"
             }
         }
     </script>
 
     <script type="module">
         import { createApp } from 'vue'
+        import { createRouter, createWebHistory } from 'vue-router'
+
         import LoginModal from '/static/js/components/login-modal.js'
         import BlogCard from '/static/js/components/blog-card.js'
         import BlogPost from '/static/js/components/blog-post.js'
         import Feature from '/static/js/components/feature.js'
+        import Home from '/static/js/pages/home.js'
+
+        const router = createRouter({
+            history: createWebHistory(),
+            routes: [
+                { path: '/', component: Home },
+                { path: '/create', component: BlogPost },
+                { path: '/blog/:id', name: 'blog', component: BlogPost, props: true }
+            ]
+        })
 
         createApp({
             components: {
                 LoginModal,
                 BlogCard,
                 BlogPost,
-                Feature
+                Feature,
+                Home
             },
             data() {
                 return {
-                    posts: [],
-                    featured: {},
                     showLoginModal: false,
                     authenticated: false
                 }
-            },
-            mounted() {
-                fetch('/api/blogs')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.posts = data
-
-                        this.posts.forEach(post => {
-                            post.created_at = new Date(post.created_at).toLocaleDateString()
-
-                            // Randomly select a banner image - maybe this should be done on the backend
-                            post.image = `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`
-                        })
-
-                        this.featured = this.posts[Math.floor(Math.random() * this.posts.length)]
-                    })
             }
-        }).mount('#app')
+        }).use(router).mount('#app')
     </script>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>

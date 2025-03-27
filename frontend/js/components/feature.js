@@ -3,7 +3,7 @@ export default {
     post: Object,
   },
   template: `
-    <a class="feature-link" href="#">
+    <router-link :to="{ name: 'blog', params: { id: post.id } }">
       <div class="feature">
         <div class="feature-image">
             <img :src="post.image" alt="Feature Image">
@@ -14,5 +14,5 @@ export default {
           <p>{{ post.body }}</p>
         </div>
       </div>
-    </a>`
+    </router-link>`
 }

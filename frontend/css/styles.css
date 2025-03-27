@@ -182,24 +182,24 @@ image {
 }
 
 /* Post cards */
-.posts {
+.post-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1rem;
 }
 
-.post {
+.post-card {
     background-color: var(--secondary-color);
     border-radius: 10px;
     filter: drop-shadow(0.3rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1));
     transition: 0.2s ease-out;
 }
 
-.post-content {
+.post-card-content {
     padding: 0 1rem 1rem;
 }
 
-.post-banner img {
+.post-card-banner img {
     width: 100%;
     height: 7rem;
     object-fit: cover;
@@ -207,9 +207,18 @@ image {
     border-bottom: 0.3rem solid var(--accent-color);
 }
 
-.post:hover {
+.post-card:hover {
     transform: scale(1.025);
     transition: 0.2s ease-out;
+}
+
+/* Post Details */
+.post {
+    margin-top: 2rem;
+}
+
+.post-banner img {
+    width: 100%;
 }
 
 /* Modal */
