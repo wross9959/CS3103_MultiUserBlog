@@ -10,8 +10,7 @@ import cgi
 import sys
 cgitb.enable()
 
-# All flask setup 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__, static_url_path='/static', static_folder='../frontend')
 app.secret_key = settings.SECRET_KEY
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
@@ -38,6 +37,10 @@ def forbidden(error):
 def not_found(error):
     return make_response(jsonify({'status': 'Resource not found'}), 404)
 
+# serve the index.html file on the root route
+@app.route('/', methods=['GET'])
+def index():
+    return app.send_static_file('index.html')
 
 # import all the routes 
 from routes import (
@@ -70,4 +73,5 @@ activities.routes(api)
 
 # main for app
 if __name__ == '__main__':
-    app.run(host=settings.APP_HOST, port=settings.APP_PORT, debug=settings.APP_DEBUG)
+    context = ('cert.pem', 'key.pem')
+    app.run(host=settings.APP_HOST, port=settings.APP_PORT, debug=settings.APP_DEBUG, ssl_context=context)

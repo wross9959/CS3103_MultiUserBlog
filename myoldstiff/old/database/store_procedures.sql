@@ -17,6 +17,11 @@ BEGIN
 END$$
 
 -- BLOG FILTERING
+CREATE PROCEDURE get_all_blogs()
+BEGIN
+    SELECT * FROM blogs;
+END$$
+
 CREATE PROCEDURE get_blogs_after_date(IN after_date DATETIME)
 BEGIN
     SELECT * FROM blogs WHERE created_at > after_date;
