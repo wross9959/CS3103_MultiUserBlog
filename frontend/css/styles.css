@@ -8,7 +8,6 @@
 /* darkmode */
 /* background  28282B  second 333  light 505050*/
 
-/* Custom Props */
 :root {
     --primary-color: #6eacda;
     --accent-color: #c24b4c;
@@ -22,7 +21,9 @@
     --lightgrey-color: #505050;
     --selectLight-color: #707070;
 }
-
+html, body, #app {
+    height: 100%;
+}
 body {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
@@ -47,6 +48,11 @@ image {
 
 /* Nav Bar */
 .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
     background-color: var(--secondary-color);
     padding: 20px;
 }
@@ -86,9 +92,13 @@ image {
 .navbar ul li a span {
     margin-left: 5px;
 }
+.navbar .container {
+    max-width: none;
+    margin: 0;
+    width: 100%;
+    padding: 0 2rem;
+}
 
-
-/* Utility Classes */
 
 .container {
     max-width: 80em;
@@ -102,7 +112,6 @@ image {
     padding: 0 15px;
 }
 
-/* Buttons */
 
 .btn {
     display: inline-block;
@@ -176,7 +185,6 @@ image {
     gap: 1rem;
 }
 
-/* Switches */
 .form-switch {
     display: flex;
     flex-direction: row;
@@ -328,7 +336,6 @@ image {
     margin-top: 1rem;
 }
 
-/* Modal */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -453,4 +460,84 @@ textarea {
 
 #register-form div:has(#username) {
     grid-column: 1 / 3;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border-radius: 10px;
+    background-color: var(--dark-color);
+    border: none;
+    color: var(--light-color);
+    font-size: 1rem;
+    outline: none;
+    width: 200px;
+    transition: 0.3s ease;
+}
+
+.search-input:focus {
+    background-color: var(--dark-color);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+
+.main-layout {
+    display: flex;
+    align-items: flex-start;
+    padding-top: 80px;
+    min-height: 100vh;
+    background-color: var(--dark-color);
+}
+
+.sidebar {
+    position: sticky;
+    top: 120px; 
+    left: 1rem;
+    width: 250px;
+    height: calc(100vh - 140px);
+    background-color: var(--secondary-color);
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    overflow-y: auto;
+  
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 2rem 3rem;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.sidebar h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: var(--light-color);
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    cursor: pointer;
+    padding: 0.5rem 0;
+    color: var(--accent-color);
+    transition: 0.2s;
+}
+
+.sidebar li:hover {
+    text-decoration: underline;
+}
+
+.author-link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.author-link:hover {
+    text-decoration: underline;
 }

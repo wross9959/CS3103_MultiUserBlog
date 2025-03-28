@@ -1,6 +1,6 @@
 export default {
     props: {
-        id: Number,
+        id: [String],
     },
     data() {
         return {
@@ -35,7 +35,11 @@ export default {
         <div class="post-header">
             <h1>{{ post.title }}</h1>
             <p>{{ post.created_at }}</p>
-            <p>{{ post.username }}</p>
+            <p>
+            <router-link :to="{ name: 'profile', params: { user_id: post.user_id } }" class="author-link">
+                {{ post.username }}
+            </router-link>
+            </p>
         </div>
         <div class="post-content" v-html="formatBlog(post.body)"></div>
     </div>`

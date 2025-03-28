@@ -29,12 +29,19 @@
 
 <body>
     <div id="app">
+        <!-- Nav Bar  -->
         <nav class="navbar">
-            <div class="container">
-                <div class="logo">
+            <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="logo-title" style="display: flex; align-items: center; gap: 1rem;">
                     <router-link to="/">
-                        <img src="/static/images/logo.png" alt="Home">
+                        <img src="/static/images/logo.png" alt="Home" style="height: 2rem;">
                     </router-link>
+                    <h2>UNB Blog</h2>
+                </div>
+
+                <div class="search-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-search" style="color: var(--light-color);"></i>
+                    <input type="text" placeholder="Search blog titles..." v-model="searchQuery" @input="searchBlogs" style="border-radius: 12px; width: 150%;">
                 </div>
                 <div class="main-menu">
                     <ul>
@@ -45,7 +52,7 @@
                             </router-link>
                         </li>
                         <li>
-                            <router-link class="btn" to="/profile" v-if="authenticated">
+                            <router-link class="btn" :to="{ name: 'profile', params: { user_id: currentUserId } }" v-if="authenticated">
                                 <i class="fas fa-user" style="background-color: #00000000;"></i>
                             </router-link>
                             <a class="btn" @click="showLoginModal=true" v-else>
@@ -62,9 +69,22 @@
                 </div>
             </div>
         </nav>
+        <div class="main-layout">
+            <sidebar
+              :categories="categories" 
+              :following="following" 
+              :selected-category="selectedCategory"
+              @filter-category="searchByCategory" 
+              @filter-user="searchByUser" 
+            ></sidebar>
+          
+            <div class="main-content">
+              <router-view></router-view>
+            </div>
+        </div>
+          
 
-        <router-view></router-view>
-
+        <!-- Modals  -->
         <login-modal v-if="showLoginModal" @close="showLoginModal=false" @login="handleLogin"></login-modal>
     </div>
 
@@ -86,7 +106,7 @@
         import BlogCard from '/static/js/components/blog-card.js'
         import BlogPost from '/static/js/components/blog-post.js'
         import Feature from '/static/js/components/feature.js'
-
+        import Sidebar from '/static/js/components/sidebar.js'
         import Home from '/static/js/pages/home.js'
         import CreatePost from '/static/js/pages/create-post.js'
         import Profile from '/static/js/pages/profile.js'
@@ -98,7 +118,7 @@
                 { path: '/create', component: CreatePost },
                 { path: '/edit-post/:id', name: 'edit', component: CreatePost, props: true },
                 { path: '/blog/:id', name: 'blog', component: BlogPost, props: true },
-                { path: '/profile', name: 'profile', component: Profile }
+                { path: '/user/:user_id', name: 'profile', component: Profile, props: route => ({ userId: route.params.user_id }) }
             ]
         });
 
@@ -109,14 +129,28 @@
                 BlogCard,
                 BlogPost,
                 Feature,
-                Home
+                Home,
+                Sidebar,
             },
             data() {
                 return {
                     showLoginModal: false,
                     authenticated: false,
-                    verified: false
+                    verified: false,
+                    searchQuery: "",
+                    categories: [],
+                    following: [],
+                    selectedCategory: null,
+                    currentUserId: null,
                 }
+            },
+            async created() {
+                const cats = await fetch('/api/categories').then(r => r.json());
+                const me = await fetch('/api/users/me').then(r => r.json());
+                const follows = await fetch(`/api/users/${me.user.user_id}/follows`).then(r => r.json());
+                this.currentUserId = me.user.user_id;
+                this.categories = cats;
+                this.following = follows;
             },
             methods: {
                 handleLogin(verified) {
@@ -138,6 +172,16 @@
                             }
                         }).showToast();
                     }
+                },
+                searchBlogs() {
+                    this.$router.push({ path: '/', query: { search: this.searchQuery }})
+                },
+                searchByCategory(category) {
+                    this.selectedCategory = category;
+                    this.$router.push({ path: '/', query: { category: category }})
+                },
+                searchByUser(user) {
+                    this.$router.push({ path: '/', query: { user: user }})
                 }
             }
         }).use(router).mount('#app')
