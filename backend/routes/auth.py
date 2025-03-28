@@ -25,6 +25,7 @@ class SignIn(Resource):
                 session['username'] = user['username']
                 session['email'] = user['email']
                 session['is_admin'] = user['admin']
+                session['verified'] = user['active']
 
                 response = {'status': 'success', 'user': user}
                 responseCode = 200
@@ -72,7 +73,8 @@ class Me(Resource):
                 'user_id': session['user_id'],
                 'username': session['username'],
                 'email': session['email'],
-                'is_admin': session['is_admin']
+                'is_admin': session['is_admin'],
+                'verified': session['verified']
             }
             return make_response(jsonify({"status": "success", "user": user}), 200)
 
