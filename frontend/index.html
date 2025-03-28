@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Home</title>
+    <title>UNB Blog</title>
 
     <!-- Poppins Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -105,15 +105,15 @@
             <sidebar
               :categories="categories" 
               :following="following" 
-              :selected-category="selectedCategory"
-              :selected-user="selectedUser"
+              :selected-category="selectedCategory || null"
+              :selected-user="selectedUser || null"
               @filter-category="searchByCategory" 
               @filter-user="searchByUser" 
             ></sidebar>
           
 
             <div class="main-content">
-                <router-view></router-view>
+                <router-view  @refresh-following="loadFollowing" ></router-view>
             </div>
         </div>
 
@@ -201,8 +201,7 @@
                 });
 
                 if (this.currentUserId) {
-                    const follows = await fetch(`/api/users/${this.currentUserId}/follows`).then(r => r.json());
-                    this.following = follows;
+                    await this.loadFollowing();
                 }
 
                 this.categories = await fetch('/api/categories').then(r => r.json());
@@ -234,10 +233,12 @@
                 },
                 searchByCategory(category) {
                     this.selectedCategory = this.selectedCategory === category ? null : category;
+                    this.selectedUser = null;
                     this.$router.push({ path: '/', query: this.selectedCategory ? { category: category } : {} });
                 },
                 searchByUser(user) {
                     this.selectedUser = this.selectedUser === user ? null : user;
+                    this.selectedCategory = null;
                     this.$router.push({
                         path: '/',
                         query: this.selectedUser ? { user: this.selectedUser } : {}
@@ -269,6 +270,12 @@
                             this.$router.push('/');
                         }
                     });
+                },
+                async loadFollowing() {
+                    if (this.currentUserId) {
+                        const follows = await fetch(`/api/users/${this.currentUserId}/follows`).then(r => r.json());
+                        this.following = follows;
+                    }
                 }
             }
         }).use(router).mount('#app')
