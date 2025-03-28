@@ -108,6 +108,8 @@ export default {
                     
                 }
 
+                this.$emit('refresh-following');
+
                 Toastify({
                     text: this.isFollowing ? "Followed User" : "Unfollowed User",
                     duration: 3000,

@@ -28,29 +28,26 @@ export default {
             const res = await fetch('/api/blogs');
             const data = await res.json();
 
-            let usernames = {};
+            const userIds = [...new Set(data.map(post => post.user_id))];
+            const userFetches = userIds.map(id =>
+                fetch(`/api/users/${id}`).then(res => res.json().then(user => ({ id, username: user.username })))
+            );
 
-            data.forEach(post => {
-                post.created_at = new Date(post.created_at).toLocaleDateString();
-                post.image = post.image_url || `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
-                post.username = 'Loading...';
+            const userResults = await Promise.all(userFetches);
+            const usernameMap = Object.fromEntries(userResults.map(u => [u.id, u.username]));
 
-                if (!usernames[post.user_id]) {
-                    fetch(`/api/users/${post.user_id}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            usernames[post.user_id] = data.username;
-                            post.username = data.username;
-                        });
-                }
-                else {
-                    post.username = usernames[post.user_id];
-                }
-            });
 
-            this.allPosts = data;
+            const enrichedPosts = data.map(post => ({
+                ...post,
+                created_at: new Date(post.created_at).toLocaleDateString(),
+                image: post.image_url || `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`,
+                username: usernameMap[post.user_id] || 'Unknown'
+            }));
+    
+            this.allPosts = enrichedPosts;
             this.filterPosts(this.$route.query);
-
+            this.posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    
             if (this.posts.length > 0) {
                 this.featured = this.posts[Math.floor(Math.random() * this.posts.length)];
             }
