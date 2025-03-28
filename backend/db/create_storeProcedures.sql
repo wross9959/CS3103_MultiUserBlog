@@ -129,8 +129,12 @@ DROP PROCEDURE IF EXISTS get_all_blogs;
 DELIMITER $$
 CREATE PROCEDURE get_all_blogs()
 BEGIN
-    SELECT * FROM blogs;
-END $$
+    SELECT 
+        b.*, 
+        c.name AS category_name
+    FROM blogs b
+    LEFT JOIN categories c ON b.category_id = c.id;
+END  $$
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS create_blog;

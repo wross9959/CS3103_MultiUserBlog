@@ -28,14 +28,15 @@ CREATE TABLE blogs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     body TEXT NOT NULL,
-    user_id INT NOT NULL
-    ADD COLUMN category_id INT,
+    user_id INT NOT NULL,
+    category_id INT,
     status VARCHAR(50),
-    ADD COLUMN image_url VARCHAR(255);
+    image_url VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL;
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 );
+
 
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
