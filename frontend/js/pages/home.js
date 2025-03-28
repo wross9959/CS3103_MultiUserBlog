@@ -9,7 +9,7 @@ export default {
     data() {
         return {
             posts: [],
-            featured: {},
+            featured: null,
         }
     },
     created() {
@@ -47,7 +47,7 @@ export default {
     },
     template: `
         <div class="container">
-            <feature v-if="featured && featured.id" :post="featured"></feature>
+            <feature v-if="featured" :post="featured"></feature>
 
             <div class="content">
                 <h1>Recent Posts</h1>

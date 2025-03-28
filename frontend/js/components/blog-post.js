@@ -1,10 +1,8 @@
 export default {
-    props: {
-        id: [String],
-    },
+    props: ['id'],
     data() {
         return {
-            post: { }
+            post: null
         }
     },
     methods: {
@@ -28,7 +26,7 @@ export default {
             })
     },
     template: `
-    <div class="post container">
+    <div class="post container" v-if="post">
         <div class="post-banner">
             <img :src="post.image" alt="Post Banner">
         </div>

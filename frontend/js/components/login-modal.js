@@ -534,8 +534,10 @@ export default {
             <input type="password" id="confirm_password" name="confirm_password" v-model="registerVals.confirm_password" required @blur="dirtyConfirmPassword = true">
             <p v-if="registerErrors.confirm_password" class="error-message">{{ registerErrors.confirm_password }}</p>
           </div>
-          <button type="submit" class="btn btn-success" :disabled="registerDisabled">Register</button>
-          <button type="button" class="btn btn-dark" @click="$emit('close')">Cancel</button>
+          <div class="flex-v">
+            <button type="submit" class="btn btn-success" :disabled="registerDisabled">Register</button>
+            <button type="button" class="btn btn-dark" @click="$emit('close')">Cancel</button>
+          </div>  
       </form>
       <a href="#" @click="() => showRegister = !showRegister" id="register-link">Already have an account?</a>
     </div>
