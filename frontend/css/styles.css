@@ -528,6 +528,23 @@ textarea {
     transition: 0.2s;
 }
 
+.sidebar ul li {
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sidebar ul li:hover {
+    background-color: var(--lightgrey-color);
+}
+
+.sidebar ul li.active {
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: 600;
+}
+
 .sidebar li:hover {
     text-decoration: underline;
 }
