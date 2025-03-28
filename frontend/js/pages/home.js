@@ -9,41 +9,78 @@ export default {
     data() {
         return {
             posts: [],
-            featured: null,
+            featured: {},
+            allPosts: [],
+
         }
     },
-    created() {
-        fetch('/api/blogs')
-            .then(response => response.json())
-            .then(data => {
-                this.posts = data;
-                let usernames = {};
+    watch: {
+        '$route.query': {
+            immediate: true,
+            handler(newQuery) {
+            this.filterPosts(newQuery);
+            }
+        }
+    },
+    async created() {
 
-                this.posts.forEach(post => {
-                    post.created_at = new Date(post.created_at).toLocaleDateString();
+        try {
+            const res = await fetch('/api/blogs');
+            const data = await res.json();
 
-                    // Randomly select a banner image - maybe this should be done on the backend
-                    post.image = post.image_url || `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
-                    post.username = 'Loading...';
-                    // Get the username of the author
-                    if (!usernames[post.user_id]) {
-                        fetch(`/api/users/${post.user_id}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                usernames[post.user_id] = data.username;
-                                post.username = data.username;
-                            });
-                    }
-                    else {
-                        post.username = usernames[post.user_id];
-                    }
-                })
+            let usernames = {};
 
-                
-                if (this.posts.length > 0) {
-                    this.featured = this.posts[Math.floor(Math.random() * this.posts.length)];
+            data.forEach(post => {
+                post.created_at = new Date(post.created_at).toLocaleDateString();
+                post.image = post.image_url || `/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
+                post.username = 'Loading...';
+
+                if (!usernames[post.user_id]) {
+                    fetch(`/api/users/${post.user_id}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            usernames[post.user_id] = data.username;
+                            post.username = data.username;
+                        });
+                }
+                else {
+                    post.username = usernames[post.user_id];
                 }
             });
+
+            this.allPosts = data;
+            this.filterPosts(this.$route.query);
+
+            if (this.posts.length > 0) {
+                this.featured = this.posts[Math.floor(Math.random() * this.posts.length)];
+            }
+        }
+        catch (e) {
+            console.error('Error fetching data:', e);
+        }
+    },
+    methods: {
+        filterPosts(query) {
+            const search = (query.search || "").toLowerCase();
+            const category = query.category;
+            const user = query.user;
+
+            this.posts = this.allPosts.filter(post => {
+                const matchesSearch =
+                    !search ||
+                    post.title.toLowerCase().includes(search) ||
+                    (post.content || "").toLowerCase().includes(search) ||
+                    post.username.toLowerCase().includes(search);
+
+                const matchesCategory =
+                    !category || post.category_name === category;
+
+                const matchesUser =
+                    !user || post.username === user;
+
+                return matchesSearch && matchesCategory && matchesUser;
+            });
+        }
     },
     template: `
         <div class="container">

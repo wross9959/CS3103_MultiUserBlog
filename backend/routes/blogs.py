@@ -24,15 +24,16 @@ class BlogList(Resource):
             abort(401)
         
         data = request.get_json()
-        req_fields = ['title', 'body', 'status']
+        req_fields = ['title', 'body', 'status', 'category_id']
 
         if not data or not all(field in data for field in req_fields):
             abort(400)
 
         image_url = data.get('image_url')
+        category_id = data.get('category_id')
 
         try: 
-            db_access('create_blog', [data['title'], data['body'], session['user_id'], data['status'], image_url])
+            db_access('create_blog', [data['title'], data['body'], session['user_id'], data['status'], image_url, category_id])
             return make_response(jsonify({"status": "Blog created"}), 201)
         except Exception as e:
             return make_response(jsonify({"status": "error", "message": str(e)}), 500)
@@ -59,15 +60,16 @@ class BlogById(Resource):
             abort(401)
 
         data = request.get_json()
-        req_fields = ['title', 'body', 'status']
+        req_fields = ['title', 'body', 'status', 'category_id']
 
         if not data or not all(field in data for field in req_fields):
             abort(400)
 
         image_url = data.get('image_url')
+        category_id = data.get('category_id')
 
         try:
-            db_access('update_blog', [blog_id, data['title'], data['body'], data['status'], image_url])
+            db_access('update_blog', [blog_id, data['title'], data['body'], data['status'], image_url. category_id])
             return make_response(jsonify({"status": "Blog updated"}), 200)
         except Exception as e:
             return make_response(jsonify({"status": "error", "message": str(e)}), 500)

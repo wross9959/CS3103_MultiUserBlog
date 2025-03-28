@@ -39,10 +39,40 @@
                     <h2>UNB Blog</h2>
                 </div>
 
-                <div class="search-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                <div class="search-wrapper" style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    background-color: var(--lightgrey-color); 
+                    border-radius: 18px;
+                    padding: 0.25rem 0.5rem;
+                    width: 500px;
+                    height: 3rem;
+                ">
                     <i class="fas fa-search" style="color: var(--light-color);"></i>
-                    <input type="text" placeholder="Search blog titles..." v-model="searchQuery" @input="searchBlogs"
-                        style="border-radius: 12px; width: 150%;">
+                    <input
+                        type="text"
+                        placeholder="Search blog titles..."
+                        v-model="searchQuery"
+                        @input="searchBlogs"
+                        style="
+                            border: none;
+                            background: transparent;
+                            outline: none;
+                            flex: 1;
+                            color: var(--text-color);
+                        "
+                    />
+                    <button v-if="searchQuery" @click="clearSearch" style="
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                        color: var(--light-color);
+                        font-size: 1.2rem;
+                        padding: 0;
+                    ">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
                 <div class="main-menu">
                     <ul>
@@ -72,8 +102,15 @@
             </div>
         </nav>
         <div class="main-layout">
-            <sidebar :categories="categories" :following="following" :selected-category="selectedCategory"
-                @filter-category="searchByCategory" @filter-user="searchByUser"></sidebar>
+            <sidebar
+              :categories="categories" 
+              :following="following" 
+              :selected-category="selectedCategory"
+              :selected-user="selectedUser"
+              @filter-category="searchByCategory" 
+              @filter-user="searchByUser" 
+            ></sidebar>
+          
 
             <div class="main-content">
                 <router-view></router-view>
@@ -138,6 +175,7 @@
                     categories: [],
                     following: [],
                     selectedCategory: null,
+                    selectedUser: null,
                     currentUserId: null,
                 }
             },
@@ -195,11 +233,19 @@
                     this.$router.push({ path: '/', query: { search: this.searchQuery } })
                 },
                 searchByCategory(category) {
-                    this.selectedCategory = category;
-                    this.$router.push({ path: '/', query: { category: category } })
+                    this.selectedCategory = this.selectedCategory === category ? null : category;
+                    this.$router.push({ path: '/', query: this.selectedCategory ? { category: category } : {} });
                 },
                 searchByUser(user) {
-                    this.$router.push({ path: '/', query: { user: user } })
+                    this.selectedUser = this.selectedUser === user ? null : user;
+                    this.$router.push({
+                        path: '/',
+                        query: this.selectedUser ? { user: this.selectedUser } : {}
+                    });
+                },
+                clearSearch() {
+                    this.searchQuery = "";
+                    this.$router.push({ path: '/', query: {} })
                 },
                 logoutUser() {
                     fetch('/api/signout', {
