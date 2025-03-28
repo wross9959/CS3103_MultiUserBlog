@@ -209,10 +209,9 @@ export default {
 
       if (response.ok) {
         let data = await response.json();
-        let user_verified = data.user.active;
 
         this.$emit('close');
-        this.$emit('login', user_verified);
+        this.$emit('login', {user_id: data.user.id, verified: data.user.active});
         Toastify({
           text: `Logged In Successfully!`,
           duration: 3000,

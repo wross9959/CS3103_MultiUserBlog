@@ -142,15 +142,36 @@
                 }
             },
             async created() {
-                const cats = await fetch('/api/categories').then(r => r.json());
-                const me = await fetch('/api/users/me').then(r => r.json());
-                const follows = await fetch(`/api/users/${me.user.user_id}/follows`).then(r => r.json());
-                this.currentUserId = me.user.user_id;
-                this.categories = cats;
-                this.following = follows;
+                await fetch('/api/users/me', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }).then(response => {
+                    if (response.status === 401 || response.status === 403) {
+                        this.authenticated = false;
+                        this.verified = false;
+                        return;
+                    }
+                    return response.json();
+                }).then(data => {
+                    if (data) {
+                        this.currentUserId = data.user.user_id;
+                        this.authenticated = true;
+                        this.verified = Boolean(data.user.verified);
+                    }
+                });
+
+                if (this.currentUserId) {
+                    const follows = await fetch(`/api/users/${this.currentUserId}/follows`).then(r => r.json());
+                    this.following = follows;
+                }
+
+                this.categories = await fetch('/api/categories').then(r => r.json());
             },
             methods: {
-                handleLogin(verified) {
+                handleLogin({ user_id, verified }) {
+                    this.currentUserId = user_id;
                     this.authenticated = true;
                     this.verified = verified;
                     this.showLoginModal = false;
@@ -181,48 +202,28 @@
                     this.$router.push({ path: '/', query: { user: user } })
                 },
                 logoutUser() {
-                    fetch('/api/signout', { method: 'DELETE' })
-                        .then(res => {
-                            if (res.ok) {
-                                this.authenticated = false;
-                                this.verified = false;
-                                Toastify({
-                                    text: 'Logged out successfully!',
-                                    duration: 3000,
-                                    close: true,
-                                    gravity: "top",
-                                    position: "center",
-                                    stopOnFocus: true,
-                                    style: {
-                                        background: "#6c757d",
-                                        boxShadow: "0.3rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1)"
-                                    }
-                                }).showToast();
-                                this.$router.push('/');
-                            }
-                        });
-
+                    fetch('/api/signout', {
+                        method: 'DELETE'
+                    }).then(res => {
+                        if (res.ok) {
+                            this.authenticated = false;
+                            this.verified = false;
+                            Toastify({
+                                text: 'Logged out successfully!',
+                                duration: 3000,
+                                close: true,
+                                gravity: "top",
+                                position: "center",
+                                stopOnFocus: true,
+                                style: {
+                                    background: "#6c757d",
+                                    boxShadow: "0.3rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1)"
+                                }
+                            }).showToast();
+                            this.$router.push('/');
+                        }
+                    });
                 }
-            },
-            mounted() {
-                fetch('/api/users/me', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                }).then(response => {
-                    if (response.status === 401 || response.status === 403) {
-                        this.authenticated = false;
-                        this.verified = false;
-                        return;
-                    }
-                    return response.json();
-                }).then(data => {
-                    if (data) {
-                        this.authenticated = true;
-                        this.verified = data.user.verified === 1;
-                    }
-                });
             }
         }).use(router).mount('#app')
     </script>
