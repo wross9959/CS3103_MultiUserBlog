@@ -69,7 +69,7 @@ class BlogById(Resource):
         category_id = data.get('category_id')
 
         try:
-            db_access('update_blog', [blog_id, data['title'], data['body'], data['status'], image_url. category_id])
+            db_access('update_blog', [blog_id, data['title'], data['body'], data['status'], image_url, category_id])
             return make_response(jsonify({"status": "Blog updated"}), 200)
         except Exception as e:
             return make_response(jsonify({"status": "error", "message": str(e)}), 500)

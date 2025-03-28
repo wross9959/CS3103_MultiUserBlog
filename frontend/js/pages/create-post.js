@@ -15,7 +15,7 @@ export default {
         }
     },
     async created() {
-        if ( this.id ) {
+        if (this.id) {
             this.isEditing = true;
             const res = await fetch(`/api/blogs/${this.id}`);
             if (res.ok) {
@@ -24,6 +24,7 @@ export default {
                 this.formData.body = blog.body;
                 this.formData.draft = blog.status === "draft";
                 this.formData.image_url = blog.image_url || "";
+                this.formData.category = blog.category_id;
             } else {
                 alert("Failed to fetch blog data!");
             }
@@ -53,7 +54,7 @@ export default {
                 url = `/api/blogs/${this.id}`;
                 method = 'PUT';
             }
-            
+
 
             const response = await fetch(url, {
                 method,
@@ -72,10 +73,10 @@ export default {
                     position: "center",
                     stopOnFocus: true,
                     style: {
-                      background: "#28a745",
-                      boxShadow: "0.3rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1)"
+                        background: "#28a745",
+                        boxShadow: "0.3rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1)"
                     }
-                  }).showToast();
+                }).showToast();
                 this.$router.push('/');
             }
             else {
@@ -87,16 +88,20 @@ export default {
                     position: "center",
                     stopOnFocus: true,
                     style: {
-                      background: "#dc3545",
-                      boxShadow: "0.3rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1)"
+                        background: "#dc3545",
+                        boxShadow: "0.3rem 0.3rem 0.2rem rgba(0, 0, 0, 0.1)"
                     }
-                  }).showToast();
+                }).showToast();
             }
         },
         async fetchCategories() {
             const res = await fetch('/api/categories');
             if (res.ok) {
                 this.categories = await res.json();
+                if (!this.isEditing && this.categories.length > 0) {
+                    this.formData.category = this.categories[0].id;
+                }
+                
             } else {
                 console.warn("Failed to fetch categories!");
             }
@@ -117,7 +122,7 @@ export default {
                 <div class="flex-h align-l">
                     <div class="form-group">
                         <label for="category">Category</label>
-                        <select class="form-control" id="category" name="category">
+                            <select class="form-control" id="category" name="category" v-model="formData.category">                            
                             <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
                         </select>
                     </div>

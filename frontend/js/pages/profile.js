@@ -140,14 +140,20 @@ export default {
             <h2>{{ isSelf ? 'Your Blogs' : user.username + "'s Blogs" }}</h2>
 
             <div class="post-cards">
-                <div class="post-card" v-for="blog in blogs" :key="blog.id">
+                <div class="post-card" v-for="blog in blogs" :key="blog.id"
+                    style="display: flex; flex-direction: column; justify-content: space-between;">
+                    
                     <blog-card :post="blog" />
-                    <div v-if="isSelf" class="btn-group" style="margin-top: 1rem;">
-                        <button class="btn btn-dark btn-sm" @click="editBlog(blog.id)">Edit</button>
-                        <button class="btn btn-accent btn-sm" @click="deleteBlog(blog.id)">Delete</button>
+
+                    <div v-if="isSelf" class="btn-group"
+                        style="margin-top: auto; display: flex; gap: 0.5rem; justify-content: flex-end; padding: 0.5rem 0.75rem 0.75rem 0;">
+                    <button class="btn btn-dark btn-sm" @click="editBlog(blog.id)">Edit</button>
+                    <button class="btn btn-accent btn-sm" @click="deleteBlog(blog.id)">Delete</button>
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 
