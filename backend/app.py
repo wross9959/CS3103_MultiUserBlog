@@ -8,6 +8,8 @@ import settings
 import cgitb
 import cgi
 import sys
+import os
+import subprocess
 cgitb.enable()
 
 
@@ -76,5 +78,11 @@ activities.routes(api)
 
 # main for app
 if __name__ == '__main__':
-    context = ('certs/cert.pem', 'certs/key.pem')
+    cert_file = 'certs/cert.pem'
+    key_file = 'certs/key.pem'
+
+    if not os.path.exists(cert_file) or not os.path.exists(key_file):
+        subprocess.run(['./makeCert'], cwd="certs", check=True)
+
+    context = (cert_file, key_file)
     app.run(host=settings.APP_HOST, port=settings.APP_PORT, ssl_context=context, debug=settings.APP_DEBUG)
