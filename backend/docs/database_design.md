@@ -323,6 +323,11 @@ BEGIN
 END
 ```
 
+#### `update_password`
+```sql
+CREATE PROCEDURE update_password(IN p_user_id INT, IN p_new_password VARCHAR(255))
+```
+
 #### `reset_password`
 ```sql
 CREATE PROCEDURE reset_password(IN p_user_id INT, IN p_token VARCHAR(255), IN p_new_password VARCHAR(255))
