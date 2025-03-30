@@ -6,7 +6,6 @@ export default {
             formData: {
                 title: "",
                 body: "",
-                draft: true,
                 image_url: "",
                 category: 1,
             },
@@ -22,7 +21,6 @@ export default {
                 const blog = await res.json();
                 this.formData.title = blog.title;
                 this.formData.body = blog.body;
-                this.formData.draft = blog.status === "draft";
                 this.formData.image_url = blog.image_url || "";
                 this.formData.category = blog.category_id;
             } else {
@@ -39,7 +37,7 @@ export default {
             let requestBody = {
                 title: this.formData.title,
                 body: this.formData.body,
-                status: this.formData.draft ? "draft" : "published",
+                status: "published",
                 image_url: this.formData.image_url || "",
                 category_id: this.formData.category
             }
@@ -101,7 +99,7 @@ export default {
                 if (!this.isEditing && this.categories.length > 0) {
                     this.formData.category = this.categories[0].id;
                 }
-                
+
             } else {
                 console.warn("Failed to fetch categories!");
             }
@@ -130,13 +128,6 @@ export default {
                         <label for="image_url">Cover Image URL (optional)</label>
                         <input type="text" class="form-control" id="image_url" v-model="formData.image_url" placeholder="https://example.com/image.jpg" />
                         <img :src="formData.image_url" style="max-width: 100%; max-height: 200px;">
-                    </div>
-                </div>
-                <div class="form-switch">
-                    <p class="switch-visible-label">Draft</p>
-                    <div class="switch">
-                        <input type="checkbox" id="draft" class="switch-input" name="draft" v-model="formData.draft" />
-                        <label for="draft" class="switch-label">Draft</label>
                     </div>
                 </div>
                 <div class="flex-h align-r">
