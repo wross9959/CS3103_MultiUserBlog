@@ -122,6 +122,8 @@ CS3103_MultiUserBlog/
 │   │   │   ├── create-post.js
 │   │   │   ├── home.js
 │   │   │   └── profile.js
+│   │   ├── utils/
+│   │   │   └── sanitize.js
 │   │   └── main.js
 │   ├── index.html
 │   ├── LICENSE

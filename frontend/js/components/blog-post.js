@@ -1,3 +1,6 @@
+
+import { escapeHtml } from "../utils/sanitize.js";
+
 export default {
     props: ['id'],
     data() {
@@ -11,7 +14,7 @@ export default {
     },
     methods: {
         formatBlog(text) {
-            return text.split('\n').map(p => `<p>${p}</p>`).join('');
+            return text.split('\n').map(p => `<p>${(escapeHtml(p))}</p>`).join('');
         },
         async addComment() {
             if (!this.newComment.trim()) return;
