@@ -92,5 +92,4 @@ if __name__ == '__main__':
 
     context = (cert_file, key_file)
     app.run(host=settings.APP_HOST, port=settings.APP_PORT, ssl_context=context, debug=settings.APP_DEBUG)
-    # app.run(host=settings.APP_HOST, port=settings.APP_PORT, debug=settings.APP_DEBUG)
 
