@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,16 +14,17 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous"
+        />
 
     <!-- Toastify -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
     <!-- Logo  -->
     <link rel="icon" type="image/svg+xml" href="/static/images/logo.ico" />
+    <!-- This is so janky chrome at a fit with our certs and grabbing css on https so i had to create a new repo with our css file and create a github pages and call the https for css there -->
+    <link rel="stylesheet" href="https://wross9959.github.io/unb-blog-assets/styles.css" />
 
-    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 </head>
 
 <body>
@@ -212,6 +212,7 @@
                     this.authenticated = true;
                     this.verified = verified;
                     this.showLoginModal = false;
+                    this.loadFollowing();
 
                     if (!this.verified) {
                         Toastify({
@@ -255,6 +256,10 @@
                         if (res.ok) {
                             this.authenticated = false;
                             this.verified = false;
+                            this.currentUserId = null;
+                            this.following = [];
+                            this.selectedCategory = null;
+
                             Toastify({
                                 text: 'Logged out successfully!',
                                 duration: 3000,
