@@ -27,7 +27,7 @@ class resetPassword(Resource):
 
             token = result[0]['token']
             subject = "UNB Blog Verfiy your account"
-            body = "Hi {first_name}, \n\n Your password reset code is: \n {token} \n\n Click the link to change your account: {appURL} \n\n Thanks,\n UNB Blog Support \n\n This is an automated message, please do not response"
+            body = f"Hi, \n\n Your password reset code is: \n {token} \n\n Click the link to change your account: {appURL} \n\n Thanks,\n UNB Blog Support \n\n This is an automated message, please do not response"
             
             if send_email(email, subject, body):
                 return make_response(jsonify({"status": "success"}), 200)

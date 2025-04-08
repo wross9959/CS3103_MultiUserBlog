@@ -4,7 +4,7 @@ from flask import Flask, jsonify, make_response
 from flask_restful import Api
 from flask_session import Session
 import settings
-import ssl
+
 import cgitb
 import cgi
 import sys
@@ -75,12 +75,6 @@ categories.routes(api)
 follows.routes(api)
 activities.routes(api)
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    if path.startswith('api/') or path.startswith('static/'):
-        return make_response(jsonify({'status': 'Resource not found'}), 404)
-    return app.send_static_file('index.html')
 
 # main for app
 if __name__ == '__main__':
@@ -92,4 +86,3 @@ if __name__ == '__main__':
 
     context = (cert_file, key_file)
     app.run(host=settings.APP_HOST, port=settings.APP_PORT, ssl_context=context, debug=settings.APP_DEBUG)
-

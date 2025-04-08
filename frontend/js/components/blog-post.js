@@ -9,7 +9,7 @@ export default {
             comments: [],
             showCommentForm: false,
             newComment: '',
-            mainUser: null,
+            mainUser: {},
         }
     },
     methods: {
@@ -47,26 +47,16 @@ export default {
     },
     async created() {
 
-        const [ postRes, commentRes] = await Promise.all([
+        const [meRes, postRes, commentRes] = await Promise.all([
+            fetch('/api/users/me'),
             fetch(`/api/blogs/${this.id}`),
             fetch(`/api/blogs/${this.id}/comments`)
         ]);
-
-        try {
-            const meRes = await fetch('/api/users/me');
-            if (meRes.ok) {
-                const me = (await meRes.json()).user;
-                this.mainUser = {
-                    user_id: me.user_id,
-                    username: me.username
-                };
-            }
-            else{
-                this.mainUser = null;
-            }
-        }
-        catch (error) {
-            this.mainUser = null;
+        const me = (await meRes.json()).user;
+        const meInfo = await fetch(`/api/users/${me.user_id}`).then(res => res.json());
+        this.mainUser = {
+            user_id: me.user_id,
+            username: meInfo.username
         }
 
         this.post = (await postRes.json());
@@ -90,6 +80,29 @@ export default {
                 };
             })
         );
+
+        // fetch(`/api/blogs/${this.id}`)
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         this.post = data
+        //         this.post.created_at = new Date(this.post.created_at).toLocaleDateString()
+        //         this.post.image = this.post.image_url ||`/static/images/banners/banner-${Math.floor(Math.random() * 10) + 1}.jpg`;
+                
+        //         fetch(`/api/users/${this.post.user_id}`)
+        //             .then(response => response.json())
+        //             .then(data => {
+        //                 this.post.username = data.username;
+        //         });
+
+        //         fetch(`/api/blogs/${this.id}/comments`)
+        //             .then(response => response.json())
+        //             .then(data => {
+        //                 this.comments = data.map(comment => ({
+        //                     ...comment,
+        //                     created_at: new Date(comment.created_at).toLocaleDateString()
+        //                 }));
+        //         });
+        //     });
     },
     template: `
     <div class="post container" v-if="post">
@@ -111,7 +124,7 @@ export default {
         <div class="comments-section">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                 <h2 style="margin: 0;">Comments</h2>
-                <button v-if="mainUser" class="btn btn-primary" @click="showCommentForm = !showCommentForm">
+                <button class="btn btn-primary" @click="showCommentForm = !showCommentForm">
                     {{ showCommentForm ? 'Cancel' : 'Add Comment' }}
                 </button>
             </div>

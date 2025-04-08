@@ -287,9 +287,11 @@ export default {
         });
 
         if (login.ok) {
+          // Generate verification token for new user
           const verify = await fetch('/api/users/me/verify');
 
           if (verify.ok) {
+            // Move to verification page
             this.showRegister = false;
             this.showVerify = true;
           } else {
